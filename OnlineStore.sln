@@ -3,9 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{35A6CC65-F0FE-473B-9A96-7CD34D2F4591}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{9360B77F-A0C7-44EF-9D84-1B2A31E03627}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineStore.Gateway", "OnlineStore.Gateway\OnlineStore.Gateway.csproj", "{07B94B16-F60D-4005-8CB7-2A0D3615C58C}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07B94B16-F60D-4005-8CB7-2A0D3615C58C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B94B16-F60D-4005-8CB7-2A0D3615C58C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B94B16-F60D-4005-8CB7-2A0D3615C58C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B94B16-F60D-4005-8CB7-2A0D3615C58C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9360B77F-A0C7-44EF-9D84-1B2A31E03627} = {35A6CC65-F0FE-473B-9A96-7CD34D2F4591}
+		{07B94B16-F60D-4005-8CB7-2A0D3615C58C} = {9360B77F-A0C7-44EF-9D84-1B2A31E03627}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DDD2BADA-918A-466C-A4AA-0CCAAC728376}
