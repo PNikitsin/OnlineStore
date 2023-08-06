@@ -33,17 +33,17 @@ namespace Catalog.Application.Services
         {
             var product = await _unitOfWork.Products.GetAsync(name => name.Name == createProductDto.Name);
 
-            if (product == null)
+            if (product != null)
             {
-                product = _mapper.Map<CreateProductDto, Product>(createProductDto);
-
-                await _unitOfWork.Products.AddAsync(product);
-                await _unitOfWork.CommitAsync();
-
-                return product;
-            }
-            else
                 throw new AlreadyExistsException("Product not found");
+            }
+
+            product = _mapper.Map<CreateProductDto, Product>(createProductDto);
+
+            await _unitOfWork.Products.AddAsync(product);
+            await _unitOfWork.CommitAsync();
+
+            return product;
         }
 
         public async Task UpdateProductAsync(UpdateProductDto updateProductDto)

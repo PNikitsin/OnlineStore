@@ -35,19 +35,17 @@ namespace Catalog.Application.Services
         {
             var category = await _unitOfWork.Categories.GetAsync(name => name.Name == createCategoryDto.Name);
 
-            if (category == null)
-            {
-                category = _mapper.Map<CreateCategoryDto, Category>(createCategoryDto);
-
-                await _unitOfWork.Categories.AddAsync(category);
-                await _unitOfWork.CommitAsync();
-
-                return category;
-            }
-            else
+            if (category != null)
             {
                 throw new AlreadyExistsException("Category already exists");
             }
+
+            category = _mapper.Map<CreateCategoryDto, Category>(createCategoryDto);
+
+            await _unitOfWork.Categories.AddAsync(category);
+            await _unitOfWork.CommitAsync();
+
+            return category;
         }
 
         public async Task UpdateCategoryAsync(UpdateCategoryDto updateCategoryDto)
