@@ -8,6 +8,19 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{9360B77F-A0C7-44EF-9D84-1B2A31E03627}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineStore.Gateway", "OnlineStore.Gateway\OnlineStore.Gateway.csproj", "{07B94B16-F60D-4005-8CB7-2A0D3615C58C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{C7BB7A0D-D649-46BC-B2B0-91FB2E769A88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{B02F400F-3875-4DAB-BE5C-189917FC823C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{31F2BAB4-4B34-47C5-A215-02958FD9622D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Web", "Catalog.Web\Catalog.Web.csproj", "{B1AB1301-9FBF-486C-B7AD-EC4FF566569D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Application", "Catalog.Application\Catalog.Application.csproj", "{507B244C-92DE-43AB-8160-83C8607F81AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Domain", "Catalog.Domain\Catalog.Domain.csproj", "{44314881-3509-47D6-B4A4-FEDB734ACCFF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Infrastructure", "Catalog.Infrastructure\Catalog.Infrastructure.csproj", "{B73E8A9B-B7F9-4B2D-B92B-CC30C40F33BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
