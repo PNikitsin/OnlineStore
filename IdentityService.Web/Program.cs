@@ -1,3 +1,4 @@
+using IdentityService.Application.AutoMapper;
 using IdentityService.Application.Services;
 using IdentityService.Infrastructure.Data;
 using IdentityService.Web.Extensions;
@@ -16,6 +17,7 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddAutoMapper(typeof(AppMapperProfile));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

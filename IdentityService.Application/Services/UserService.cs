@@ -4,6 +4,7 @@ using IdentityService.Domain.Entities;
 using IdentityService.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using AutoMapper;
 
 namespace IdentityService.Application.Services
 {
@@ -11,11 +12,13 @@ namespace IdentityService.Application.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
-        public UserService(UserManager<ApplicationUser> userManager, ITokenService tokenService)
+        public UserService(UserManager<ApplicationUser> userManager, ITokenService tokenService, IMapper mapper)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
 
         public async Task<RegisterUserDto> UserRegistrationAsync(RegisterUserDto registerUserDto)
@@ -27,13 +30,7 @@ namespace IdentityService.Application.Services
                 throw new AlreadyExistsException("Username or email already taken");
             }
 
-            user = new ApplicationUser
-            {
-                UserName = registerUserDto.UserName,
-                Email = registerUserDto.Email,
-                FirstName = registerUserDto.FirstName,
-                LastName = registerUserDto.LastName
-            };
+            user = _mapper.Map<RegisterUserDto, ApplicationUser>(registerUserDto);
 
             var result = await _userManager.CreateAsync(user, registerUserDto.Password);
 
