@@ -1,46 +1,38 @@
-using IdentityService.Application.AutoMapper;
-using IdentityService.Application.Services;
 using IdentityService.Infrastructure.Data;
-using IdentityService.Web.Extensions;
-using IdentityService.Web.Middleware;
-using Microsoft.EntityFrameworkCore;
+using IdentityService.Web;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Information("Starting up");
 
-builder.Host.UseSerilog((context, configuration) =>
+try
 {
-    configuration.ReadFrom.Configuration(context.Configuration);
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddDatabase(builder.Configuration);
-builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<ITokenService, TokenService>();
-builder.Services.AddAutoMapper(typeof(AppMapperProfile));
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    builder.Host.UseSerilog((context, configuration) =>
+    {
+        configuration.ReadFrom.Configuration(context.Configuration);
+    });
 
-var app = builder.Build();
+    var app = builder
+        .ConfigureServices()
+        .ConfigurePipeline();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.Run();
+
+    if (args.Contains("/seed"))
+    {
+        Log.Information("Seeding database...");
+        await ApplicationDbContextSeed.SeedEssentialsAsync(app.Services);
+        Log.Information("Done seeding database. Exiting.");
+        return;
+    }
 }
-if (args.Contains("/seed"))
+catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException" && ex.GetType().Name is not "HostAbortedException")
 {
-    await ApplicationDbContextSeed.SeedEssentialsAsync(app.Services);
-    return;
+    Log.Fatal(ex, "Unhandled exception");
 }
-
-app.UseMiddleware<ErrorHandlerMiddleware>();
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+}

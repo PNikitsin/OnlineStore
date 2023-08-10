@@ -32,12 +32,9 @@ namespace IdentityService.Application.Services
 
             user = _mapper.Map<RegisterUserDto, ApplicationUser>(registerUserDto);
 
-            var result = await _userManager.CreateAsync(user, registerUserDto.Password);
+            await _userManager.CreateAsync(user, registerUserDto.Password);
 
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(user, Roles.User.ToString());
-            }
+            await _userManager.AddToRoleAsync(user, Roles.User.ToString());
 
             return registerUserDto;
         }
