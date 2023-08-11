@@ -1,45 +1,29 @@
-using Catalog.Application.AutoMapper;
-using Catalog.Application.Services;
-using Catalog.Domain.Interfaces;
-using Catalog.Infrastructure.Data;
-using Catalog.Web.Extensions;
-using Catalog.Web.Middleware;
+using Catalog.Web;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Information("Starting up");
 
-builder.Host.UseSerilog((context, configuration) =>
+try
 {
-    configuration.ReadFrom.Configuration(context.Configuration);
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDatabase(builder.Configuration);
-builder.Services.AddAccessToken(builder.Configuration);
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddTransient<IProductService, ProductService>();
-builder.Services.AddTransient<ICategoryService, CategoryService>();
-builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddAutoMapper(typeof(AppMapperProfile));
-builder.Services.AddControllers();
-builder.Services.AddValidation();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerUI();
+    builder.Host.UseSerilog((context, configuration) =>
+    {
+        configuration.ReadFrom.Configuration(context.Configuration);
+    });
 
-var app = builder.Build();
+    var app = builder
+        .ConfigureServices()
+        .ConfigurePipeline();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.Run();
 }
-
-app.UseMiddleware<ErrorHandlerMiddleware>();
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException" && ex.GetType().Name is not "HostAbortedException")
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+}
