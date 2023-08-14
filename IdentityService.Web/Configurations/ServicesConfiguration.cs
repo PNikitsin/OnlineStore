@@ -1,11 +1,10 @@
 ﻿using IdentityService.Application.AutoMapper;
 using IdentityService.Application.Services;
 using IdentityService.Web.Extensions;
-using IdentityService.Web.Middleware;
 
-namespace IdentityService.Web
+namespace IdentityService.Web.Configurations
 {
-    internal static class HostingExtensions
+    public static class ServicesConfiguration
     {
         public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
         {
@@ -19,25 +18,6 @@ namespace IdentityService.Web
             builder.Services.AddSwaggerGen();
 
             return builder.Build();
-        }
-
-        public static WebApplication ConfigurePipeline(this WebApplication app)
-        {
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseMiddleware<ErrorHandlerMiddleware>();
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            return app;
         }
     }
 }

@@ -1,5 +1,4 @@
 using IdentityService.Infrastructure.Data;
-using IdentityService.Web;
 using IdentityService.Web.Configurations;
 using Serilog;
 
