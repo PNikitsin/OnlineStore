@@ -1,13 +1,13 @@
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using OnlineStore.Gateway.Configurations;
 using Serilog;
+
+SerilogConfiguration.ConfigureLogging();
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, configuration) =>
-{
-    configuration.ReadFrom.Configuration(context.Configuration);
-});
+builder.Host.UseSerilog();
 
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 builder.Services.AddOcelot(builder.Configuration);
