@@ -26,7 +26,11 @@ try
         return;
     }
 }
-catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException" && ex.GetType().Name is not "HostAbortedException")
+catch (HostAbortedException ex) 
+{
+    Log.Fatal(ex.Message);
+}
+catch (Exception ex)
 {
     Log.Fatal(ex, "Unhandled exception");
 }
