@@ -25,6 +25,20 @@ namespace Ordering.Application.Services
             return orders;
         }
 
+        public async Task<Order> GetOrderAsync(int id)
+        {
+            var order = await _unitOfWork.Orders.GetAsync(order => order.Id == id);
+
+            return order;
+        }
+
+        public async Task<Order> GetOrderAsync(string userName)
+        {
+            var order = await _unitOfWork.Orders.GetAsync(order => order.UserName == userName);
+
+            return order;
+        }
+
         public async Task<Order> CreateOrderAsync(BasketDto basketDto, string userName)
         {
             var order = _mapper.Map<Order>(basketDto);

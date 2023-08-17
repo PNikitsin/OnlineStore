@@ -8,11 +8,11 @@ namespace Ordering.Web.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
 
-        public OrderController(IOrderService orderService)
+        public OrdersController(IOrderService orderService)
         {
             _orderService = orderService;
         }
@@ -24,6 +24,24 @@ namespace Ordering.Web.Controllers
             var orders = await _orderService.GetOrdersAsync();
 
             return Ok(orders);
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetOrderAsync(int id)
+        {
+            var orders = await _orderService.GetOrderAsync(id);
+
+            return Ok(orders);
+        }
+
+        [HttpGet("details")]
+        public async Task<IActionResult> CheckOrderAsync()
+        {
+            string userName = User.Identity.Name;
+            var order = await _orderService.GetOrderAsync(userName);
+
+            return Ok(order);
         }
 
         [HttpPost]
