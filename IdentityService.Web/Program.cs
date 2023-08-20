@@ -1,4 +1,3 @@
-using IdentityService.Infrastructure.Data;
 using IdentityService.Web.Configurations;
 using Serilog;
 
@@ -17,22 +16,15 @@ try
         .ConfigurePipeline();
 
     app.Run();
-
-    if (args.Contains("/seed"))
-    {
-        Log.Information("Seeding database...");
-        await ApplicationDbContextSeed.SeedEssentialsAsync(app.Services);
-        Log.Information("Done seeding database. Exiting.");
-        return;
-    }
 }
-catch (HostAbortedException ex) 
+catch (HostAbortedException ex)
 {
     Log.Fatal(ex.Message);
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Unhandled exception");
+    Log.Fatal(ex.Message);
+    Log.Information("Unhandled exception");
 }
 finally
 {

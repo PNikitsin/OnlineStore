@@ -23,7 +23,8 @@ catch (HostAbortedException ex)
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Unhandled exception");
+    Log.Fatal(ex.Message);
+    Log.Information("Unhandled exception");
 }
 finally
 {
