@@ -1,9 +1,9 @@
-﻿using IdentityService.Domain.Entities;
-using IdentityService.Domain.Enums;
+﻿using Identity.Domain.Entities;
+using Identity.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace IdentityService.Infrastructure.Data
+namespace Identity.Infrastructure.Data
 {
     public static class ApplicationDbContextSeed
     {

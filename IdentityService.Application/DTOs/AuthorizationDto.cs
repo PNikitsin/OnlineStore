@@ -1,4 +1,4 @@
-﻿namespace IdentityService.Application.DTOs
+﻿namespace Identity.Application.DTOs
 {
     public class AuthorizationDto
     {

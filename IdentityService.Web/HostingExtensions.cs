@@ -1,9 +1,9 @@
-﻿using IdentityService.Application.AutoMapper;
-using IdentityService.Application.Services;
-using IdentityService.Web.Extensions;
-using IdentityService.Web.Middleware;
+﻿using Identity.Application.AutoMapper;
+using Identity.Application.Services;
+using Identity.Web.Extensions;
+using Identity.Web.Middleware;
 
-namespace IdentityService.Web
+namespace Identity.Web
 {
     internal static class HostingExtensions
     {

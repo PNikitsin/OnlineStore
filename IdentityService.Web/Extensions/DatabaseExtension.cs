@@ -1,9 +1,9 @@
-﻿using IdentityService.Domain.Entities;
-using IdentityService.Infrastructure.Data;
+﻿using Identity.Domain.Entities;
+using Identity.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityService.Web.Extensions
+namespace Identity.Web.Extensions
 {
     public static class DatabaseExtension
     {

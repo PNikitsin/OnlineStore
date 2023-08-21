@@ -9,13 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{FE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{5DF11460-E141-42C3-BA38-A34350EE3CB8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.Web", "IdentityService.Web\IdentityService.Web.csproj", "{4CEAD02E-3942-4900-95D1-C55A3326426F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Web", "IdentityService.Web\Identity.Web.csproj", "{4CEAD02E-3942-4900-95D1-C55A3326426F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.Domain", "IdentityService.Domain\IdentityService.Domain.csproj", "{D6EF8AF5-094F-4D2D-87C9-5762C70676DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Domain", "IdentityService.Domain\Identity.Domain.csproj", "{D6EF8AF5-094F-4D2D-87C9-5762C70676DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.Application", "IdentityService.Application\IdentityService.Application.csproj", "{3C11AF07-E30D-418D-B8B8-0966D8F737F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Application", "IdentityService.Application\Identity.Application.csproj", "{3C11AF07-E30D-418D-B8B8-0966D8F737F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.Infrastructure", "IdentityService.Infrastructure\IdentityService.Infrastructure.csproj", "{0C9BB2EB-D1B2-4A3C-A666-939339771329}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Infrastructure", "IdentityService.Infrastructure\Identity.Infrastructure.csproj", "{0C9BB2EB-D1B2-4A3C-A666-939339771329}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{67BA435C-0D65-43F1-AFD4-F13AB129F3D7}"
 EndProject
@@ -33,13 +33,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineStore.Gateway", "Onli
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ordering", "Ordering", "{FEB5EC34-4E99-40C6-B081-1DCDA23DA354}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Web", "Ordering.Web\Ordering.Web.csproj", "{0E2E1E73-64CC-459E-88A7-D4669BF9FABC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Web", "Ordering.Web\Ordering.Web.csproj", "{0E2E1E73-64CC-459E-88A7-D4669BF9FABC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Domain", "Ordering.Domain\Ordering.Domain.csproj", "{9FA63B81-C535-4EE8-BA37-7A3906D92A7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Domain", "Ordering.Domain\Ordering.Domain.csproj", "{9FA63B81-C535-4EE8-BA37-7A3906D92A7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Infrastructure", "Ordering.Infrastructure\Ordering.Infrastructure.csproj", "{C58DC5B5-9DEB-48A6-A010-E7765D794733}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Infrastructure", "Ordering.Infrastructure\Ordering.Infrastructure.csproj", "{C58DC5B5-9DEB-48A6-A010-E7765D794733}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Application", "Ordering.Application\Ordering.Application.csproj", "{9A4969FF-0900-4145-AC3E-D61D351C6BFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Application", "Ordering.Application\Ordering.Application.csproj", "{9A4969FF-0900-4145-AC3E-D61D351C6BFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

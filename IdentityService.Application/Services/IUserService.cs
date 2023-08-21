@@ -1,6 +1,6 @@
-﻿using IdentityService.Application.DTOs;
+﻿using Identity.Application.DTOs;
 
-namespace IdentityService.Application.Services
+namespace Identity.Application.Services
 {
     public interface IUserService
     {

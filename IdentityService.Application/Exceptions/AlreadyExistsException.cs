@@ -1,4 +1,4 @@
-﻿namespace IdentityService.Application.Exceptions
+﻿namespace Identity.Application.Exceptions
 {
     public class AlreadyExistsException : Exception
     {

@@ -1,5 +1,5 @@
-using IdentityService.Infrastructure.Data;
-using IdentityService.Web;
+using Identity.Infrastructure.Data;
+using Identity.Web;
 using Serilog;
 
 Log.Information("Starting up");

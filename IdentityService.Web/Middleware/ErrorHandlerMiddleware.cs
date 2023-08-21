@@ -1,8 +1,8 @@
-﻿using IdentityService.Application.Exceptions;
+﻿using Identity.Application.Exceptions;
 using System.Net;
 using System.Text.Json;
 
-namespace IdentityService.Web.Middleware
+namespace Identity.Web.Middleware
 {
     public class ErrorHandlerMiddleware
     {

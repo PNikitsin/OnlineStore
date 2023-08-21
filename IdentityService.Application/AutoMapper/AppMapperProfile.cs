@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using IdentityService.Application.DTOs;
-using IdentityService.Domain.Entities;
+using Identity.Application.DTOs;
+using Identity.Domain.Entities;
 
-namespace IdentityService.Application.AutoMapper
+namespace Identity.Application.AutoMapper
 {
     public class AppMapperProfile : Profile
     {

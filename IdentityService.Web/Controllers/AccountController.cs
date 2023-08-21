@@ -1,8 +1,8 @@
-﻿using IdentityService.Application.DTOs;
-using IdentityService.Application.Services;
+﻿using Identity.Application.DTOs;
+using Identity.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IdentityService.Web.Controllers
+namespace Identity.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

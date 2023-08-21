@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace IdentityService.Application.DTOs.Validators
+namespace Identity.Application.DTOs.Validators
 {
     public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
     {

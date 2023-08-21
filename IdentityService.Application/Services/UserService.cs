@@ -1,12 +1,12 @@
-﻿using IdentityService.Application.DTOs;
-using IdentityService.Application.Exceptions;
-using IdentityService.Domain.Entities;
-using IdentityService.Domain.Enums;
+﻿using Identity.Application.DTOs;
+using Identity.Application.Exceptions;
+using Identity.Domain.Entities;
+using Identity.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using AutoMapper;
 
-namespace IdentityService.Application.Services
+namespace Identity.Application.Services
 {
     public class UserService : IUserService
     {
