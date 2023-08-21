@@ -17,8 +17,6 @@ try
         .ConfigureServices()
         .ConfigurePipeline();
 
-    app.Run();
-
     if (args.Contains("/seed"))
     {
         Log.Information("Seeding database...");
@@ -26,6 +24,8 @@ try
         Log.Information("Done seeding database. Exiting.");
         return;
     }
+
+    app.Run();
 }
 catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException" && ex.GetType().Name is not "HostAbortedException")
 {
