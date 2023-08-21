@@ -1,10 +1,7 @@
-﻿using Ordering.Domain.Enums;
-
-namespace Ordering.Domain.Entities
+﻿namespace Ordering.Domain.Entities
 {
-    public class Order
+    public class Order : BaseEntity
     {
-        public int Id { get; set; }
         public string UserName { get; set; } = null!;
         public decimal? TotalPrice { get; set; }
         public DateTime CreatedAt { get; set; }

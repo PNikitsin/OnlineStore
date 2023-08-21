@@ -25,7 +25,7 @@ namespace Ordering.Application.Services
             return orders;
         }
 
-        public async Task<Order> GetOrderAsync(int id)
+        public async Task<Order> GetOrderAsync(Guid id)
         {
             var order = await _unitOfWork.Orders.GetAsync(order => order.Id == id);
 
@@ -53,7 +53,7 @@ namespace Ordering.Application.Services
             return order;
         }
 
-        public async Task DeleteOrderAsync(int id)
+        public async Task DeleteOrderAsync(Guid id)
         {
             var order = await _unitOfWork.Orders.GetAsync(order => order.Id == id)
                 ?? throw new NotFoundException("Order not found");

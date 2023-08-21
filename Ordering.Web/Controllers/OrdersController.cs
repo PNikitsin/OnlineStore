@@ -28,7 +28,7 @@ namespace Ordering.Web.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> GetOrderAsync(int id)
+        public async Task<IActionResult> GetOrderAsync(Guid id)
         {
             var orders = await _orderService.GetOrderAsync(id);
 
@@ -54,7 +54,7 @@ namespace Ordering.Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrderAsync(int id)
+        public async Task<IActionResult> DeleteOrderAsync(Guid id)
         {
             await _orderService.DeleteOrderAsync(id);
 
