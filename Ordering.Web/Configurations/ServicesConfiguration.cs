@@ -16,6 +16,7 @@ namespace Ordering.Web.Configurations
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddTransient<IOrderService, OrderService>();
             builder.Services.AddAutoMapper(typeof(AppMapperProfile));
+            builder.Services.AddGrpc();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerUI();

@@ -1,4 +1,5 @@
-﻿using Ordering.Web.Middleware;
+﻿using Ordering.Web.Grpc;
+using Ordering.Web.Middleware;
 
 namespace Ordering.Web.Configurations
 {
@@ -20,6 +21,8 @@ namespace Ordering.Web.Configurations
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.MapGrpcService<GrpcUserService>();
 
             return app;
         }

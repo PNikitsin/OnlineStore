@@ -1,4 +1,6 @@
 ﻿using Identity.Application.AutoMapper;
+using Identity.Application.Grpc;
+using Identity.Application.Grpc.Protos;
 using Identity.Application.Services;
 using Identity.Web.Extensions;
 using Identity.Web.Middleware;
@@ -17,6 +19,13 @@ namespace Identity.Web
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddGrpcClient<GrpcUser.GrpcUserClient>(config =>
+            {
+                config.Address = new Uri(builder.Configuration["GrpcHost"]);
+            });
+
+            builder.Services.AddScoped<GrpcUserClient>();
 
             return builder.Build();
         }

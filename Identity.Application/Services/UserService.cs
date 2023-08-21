@@ -5,18 +5,21 @@ using Identity.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using AutoMapper;
+using Identity.Application.Grpc;
 
 namespace Identity.Application.Services
 {
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly GrpcUserClient _userClient;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
 
-        public UserService(UserManager<ApplicationUser> userManager, ITokenService tokenService, IMapper mapper)
+        public UserService(UserManager<ApplicationUser> userManager, GrpcUserClient userClient, ITokenService tokenService, IMapper mapper)
         {
             _userManager = userManager;
+            _userClient = userClient;
             _tokenService = tokenService;
             _mapper = mapper;
         }
@@ -35,6 +38,8 @@ namespace Identity.Application.Services
             await _userManager.CreateAsync(user, registerUserDto.Password);
 
             await _userManager.AddToRoleAsync(user, Roles.User.ToString());
+
+            await _userClient.CreateUser(user);
 
             return registerUserDto;
         }
