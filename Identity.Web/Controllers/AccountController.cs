@@ -18,7 +18,7 @@ namespace Identity.Web.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> RegisterAsync(RegisterUserDto registerUserDto)
+        public async Task<IActionResult> RegisterAsync(RegisterUserDto registerUserDto)
         {
             var result = await _userService.UserRegistrationAsync(registerUserDto);
 
@@ -33,6 +33,15 @@ namespace Identity.Web.Controllers
             var token = await _userService.UserAuthorizationAsync(loginUserDto, secretKey);
 
             return Ok(token);
+        }
+
+        [HttpDelete]
+        [Route("delete")]
+        public async Task<IActionResult> DeleteAsync(DeleteUserDto deleteUserDto)
+        {
+            await _userService.UserDeleteAsync(deleteUserDto);
+
+            return NoContent();
         }
     }
 }

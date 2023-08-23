@@ -1,6 +1,4 @@
 ﻿using Identity.Application.AutoMapper;
-using Identity.Application.Grpc;
-using Identity.Application.Grpc.Protos;
 using Identity.Application.Services;
 using Identity.Web.Extensions;
 using Identity.Web.Middleware;
@@ -13,19 +11,15 @@ namespace Identity.Web
         {
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
             builder.Services.AddDatabase(builder.Configuration);
+            builder.Services.AddGrpcClient(builder.Configuration);
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<ITokenService, TokenService>();
             builder.Services.AddAutoMapper(typeof(AppMapperProfile));
             builder.Services.AddControllers();
+            builder.Services.AddValidation();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
-            builder.Services.AddGrpcClient<GrpcUser.GrpcUserClient>(config =>
-            {
-                config.Address = new Uri(builder.Configuration["GrpcHost"]);
-            });
-
-            builder.Services.AddScoped<GrpcUserClient>();
+            builder.Services.AddMessageBroker(builder.Configuration);
 
             return builder.Build();
         }
