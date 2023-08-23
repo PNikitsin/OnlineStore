@@ -9,6 +9,6 @@ namespace Ordering.Infrastructure.Data
         public DbSet<User> Users { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options) { Database.EnsureCreated(); }
+            : base(options) { }
     }
 }
