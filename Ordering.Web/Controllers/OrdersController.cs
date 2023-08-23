@@ -35,25 +35,25 @@ namespace Ordering.Web.Controllers
             return Ok(orders);
         }
 
-        [HttpGet("details")]
-        public async Task<IActionResult> CheckOrderAsync()
+        [HttpPut]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> UpdateOrderAsync([FromBody] UpdateOrderDto updateOrderDto)
         {
-            string userName = User.Identity.Name;
-            var order = await _orderService.GetOrderAsync(userName);
+            var order = await _orderService.UpdateOrderAsync(updateOrderDto);
 
             return Ok(order);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrderAsync([FromBody] BasketDto basketDto)
+        public async Task<IActionResult> CreateOrderAsync([FromBody] CreateOrderDto basketDto)
         {
-            string userName = User.Identity.Name;
-            var order = await _orderService.CreateOrderAsync(basketDto, userName);
+            var order = await _orderService.CreateOrderAsync(basketDto);
 
             return Ok(order);
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteOrderAsync(Guid id)
         {
             await _orderService.DeleteOrderAsync(id);

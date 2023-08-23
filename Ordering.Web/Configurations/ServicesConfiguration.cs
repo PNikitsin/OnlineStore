@@ -12,9 +12,10 @@ namespace Ordering.Web.Configurations
         {
             builder.Services.AddAccessToken(builder.Configuration);
             builder.Services.AddDatabase(builder.Configuration);
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddTransient<IOrderService, OrderService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddAutoMapper(typeof(AppMapperProfile));
             builder.Services.AddGrpc();
             builder.Services.AddMessageBroker(builder.Configuration);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Ordering.Application.DTOs;
 using Ordering.Application.Exceptions;
 using Ordering.Domain.Entities;
@@ -9,11 +10,13 @@ namespace Ordering.Application.Services
 {
     public class OrderService : IOrderService
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork; 
         private readonly IMapper _mapper;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -29,25 +32,38 @@ namespace Ordering.Application.Services
         {
             var order = await _unitOfWork.Orders.GetAsync(order => order.Id == id);
 
-            return order;
-        }
-
-        public async Task<Order> GetOrderAsync(string userName)
-        {
-            var order = await _unitOfWork.Orders.GetAsync(order => order.UserName == userName);
+            if (order == null)
+            {
+                throw new NotFoundException("OrderNotFound");
+            }
 
             return order;
         }
 
-        public async Task<Order> CreateOrderAsync(BasketDto basketDto, string userName)
+        public async Task<Order> CreateOrderAsync(CreateOrderDto orderDto)
         {
-            var order = _mapper.Map<Order>(basketDto);
+            var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
 
-            order.UserName = userName;
+            var user = await _unitOfWork.Users.GetAsync(user => user.UserName == userName);
+
+            var order = _mapper.Map<CreateOrderDto, Order>(orderDto);
+
             order.CreatedAt = DateTime.Now;
             order.OrderStatus = OrderStatus.Accepted.ToString();
+            order.UserId = user.Id;
 
             await _unitOfWork.Orders.AddAsync(order);
+            await _unitOfWork.CommitAsync();
+
+            return order;
+        }
+
+        public async Task<Order> UpdateOrderAsync(UpdateOrderDto updateOrderDto)
+        {
+            var order = await _unitOfWork.Orders.GetAsync(order => order.Id == updateOrderDto.Id);
+            order.OrderStatus = updateOrderDto.Status.ToString();
+
+            _unitOfWork.Orders.Update(order);
             await _unitOfWork.CommitAsync();
 
             return order;

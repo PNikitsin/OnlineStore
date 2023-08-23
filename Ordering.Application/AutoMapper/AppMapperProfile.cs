@@ -8,7 +8,7 @@ namespace Ordering.Application.AutoMapper
     {
         public AppMapperProfile()
         {
-            CreateMap<BasketDto, Order>();
+            CreateMap<CreateOrderDto, Order>();
         }
     }
 }
