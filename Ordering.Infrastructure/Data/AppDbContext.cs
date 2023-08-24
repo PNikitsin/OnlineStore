@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Ordering.Domain.Entities;
+using System.Reflection;
 
 namespace Ordering.Infrastructure.Data
 {
@@ -10,5 +11,10 @@ namespace Ordering.Infrastructure.Data
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
     }
 }
