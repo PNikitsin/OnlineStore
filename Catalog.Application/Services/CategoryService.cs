@@ -36,7 +36,20 @@ namespace Catalog.Application.Services
 
         public async Task<Category> GetCategoryAsync(int id)
         {
-            var category = await _unitOfWork.Categories.GetAsync(category => category.Id == id);
+            Category category;
+            var categories = await _cacheRepository.GetDataAsync<IEnumerable<Category>>("category");
+
+            if (categories != null)
+            {
+                category = categories.FirstOrDefault(category => category.Id == id)!;
+
+                if (category != null)
+                {
+                    return category;
+                }
+            }
+
+            category = await _unitOfWork.Categories.GetAsync(category => category.Id == id);
 
             return category ?? throw new NotFoundException("Category not found");
         }

@@ -36,9 +36,22 @@ namespace Catalog.Application.Services
 
         public async Task<Product> GetProductAsync(int id)
         {
-            var category = await _unitOfWork.Products.GetAsync(category => category.Id == id);
+            Product product;
+            var products = await _cacheRepository.GetDataAsync<IEnumerable<Product>>("product");
 
-            return category ?? throw new NotFoundException("Product not found");
+            if (products != null)
+            {
+                product = products.FirstOrDefault(product => product.Id == id)!;
+
+                if (product != null)
+                {
+                    return product;
+                }
+            }
+
+            product = await _unitOfWork.Products.GetAsync(product => product.Id == id);
+
+            return product ?? throw new NotFoundException("Product not found");
         }
 
         public async Task<Product> CreateProductAsync(CreateProductDto createProductDto)

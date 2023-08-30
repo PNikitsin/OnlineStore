@@ -44,14 +44,22 @@ namespace Ordering.Application.Services
 
         public async Task<Order> GetOrderAsync(Guid id)
         {
-            var order = await _unitOfWork.Orders.GetAsync(order => order.Id == id);
+            Order order;
+            var orders = await _cacheRepository.GetDataAsync<IEnumerable<Order>>("order");
 
-            if (order == null)
+            if (orders != null)
             {
-                throw new NotFoundException("OrderNotFound");
+                order = orders.FirstOrDefault(order => order.Id == order.Id)!;
+
+                if (order != null)
+                {
+                    return order;
+                }
             }
 
-            return order;
+            order = await _unitOfWork.Orders.GetAsync(order => order.Id == id);
+
+            return order ?? throw new NotFoundException("OrderNotFound");
         }
 
         public async Task<Order> CreateOrderAsync(CreateOrderDto orderDto)
