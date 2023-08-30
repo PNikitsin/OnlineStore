@@ -10,16 +10,26 @@ namespace Catalog.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ICacheRepository _cacheRepository;
 
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, ICacheRepository cacheRepository)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _cacheRepository = cacheRepository;
         }
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
-            var categories = await _unitOfWork.Categories.GetAllAsync();
+            var categories = await _cacheRepository.GetDataAsync<IEnumerable<Category>>("category");
+
+            if (categories != null)
+            {
+                return categories;
+            }
+
+            categories = await _unitOfWork.Categories.GetAllAsync();
+            await _cacheRepository.SetDataAsync("category", categories);
 
             return categories;
         }
@@ -44,6 +54,7 @@ namespace Catalog.Application.Services
 
             await _unitOfWork.Categories.AddAsync(category);
             await _unitOfWork.CommitAsync();
+            await _cacheRepository.RemoveAsync("category");
 
             return category;
         }
@@ -58,6 +69,8 @@ namespace Catalog.Application.Services
 
             _unitOfWork.Categories.Update(category);
             await _unitOfWork.CommitAsync();
+
+            await _cacheRepository.RemoveAsync("category");
         }
 
         public async Task DeleteCategoryAsync(int id)
@@ -67,6 +80,8 @@ namespace Catalog.Application.Services
             
             _unitOfWork.Categories.Remove(category);
             await _unitOfWork.CommitAsync();
+
+            await _cacheRepository.RemoveAsync("category");
         }
     }
 }

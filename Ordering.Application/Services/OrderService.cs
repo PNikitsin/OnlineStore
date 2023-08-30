@@ -13,17 +13,31 @@ namespace Ordering.Application.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork; 
         private readonly IMapper _mapper;
+        private readonly ICacheRepository _cacheRepository;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public OrderService(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor,
+            ICacheRepository cacheRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _cacheRepository = cacheRepository;
         }
 
         public async Task<IEnumerable<Order>> GetOrdersAsync()
         {
-            var orders = await _unitOfWork.Orders.GetAllAsync();
+            var orders = await _cacheRepository.GetDataAsync<IEnumerable<Order>>("order");
+
+            if (orders != null)
+            {
+                return orders;
+            }
+
+            orders = await _unitOfWork.Orders.GetAllAsync();
+            await _cacheRepository.SetDataAsync("order", orders);
 
             return orders;
         }
@@ -55,6 +69,8 @@ namespace Ordering.Application.Services
             await _unitOfWork.Orders.AddAsync(order);
             await _unitOfWork.CommitAsync();
 
+            await _cacheRepository.RemoveAsync("order");
+
             return order;
         }
 
@@ -66,6 +82,8 @@ namespace Ordering.Application.Services
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.CommitAsync();
 
+            await _cacheRepository.RemoveAsync("order");
+
             return order;
         }
 
@@ -76,6 +94,8 @@ namespace Ordering.Application.Services
 
             _unitOfWork.Orders.Remove(order);
             await _unitOfWork.CommitAsync();
+
+            await _cacheRepository.RemoveAsync("order");
         }
     }
 }

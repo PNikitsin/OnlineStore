@@ -10,16 +10,28 @@ namespace Catalog.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ICacheRepository _cacheRepository;
 
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, ICacheRepository cacheRepository)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _cacheRepository = cacheRepository;
         }
 
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
-            return await _unitOfWork.Products.GetAllAsync();
+            var products = await _cacheRepository.GetDataAsync<IEnumerable<Product>>("product");
+
+            if (products != null)
+            {
+                return products;
+            }
+
+            products = await _unitOfWork.Products.GetAllAsync();
+            await _cacheRepository.SetDataAsync("product", products);
+
+            return products;
         }
 
         public async Task<Product> GetProductAsync(int id)
@@ -43,6 +55,8 @@ namespace Catalog.Application.Services
             await _unitOfWork.Products.AddAsync(product);
             await _unitOfWork.CommitAsync();
 
+            await _cacheRepository.RemoveAsync("product");
+
             return product;
         }
 
@@ -60,6 +74,8 @@ namespace Catalog.Application.Services
 
             _unitOfWork.Products.Update(product);
             await _unitOfWork.CommitAsync();
+
+            await _cacheRepository.RemoveAsync("product");
         }
 
         public async Task DeleteProductAsync(int id)
@@ -69,6 +85,8 @@ namespace Catalog.Application.Services
 
             _unitOfWork.Products.Remove(product);
             await _unitOfWork.CommitAsync();
+
+            await _cacheRepository.RemoveAsync("product");
         }
     }
 }
