@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Ordering.Application.DTOs;
 using Ordering.Application.Exceptions;
@@ -37,7 +38,8 @@ namespace Ordering.Application.Services
             }
 
             orders = await _unitOfWork.Orders.GetAllAsync();
-            await _cacheRepository.SetDataAsync("order", orders);
+
+            BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("order", orders));
 
             return orders;
         }
@@ -77,7 +79,7 @@ namespace Ordering.Application.Services
             await _unitOfWork.Orders.AddAsync(order);
             await _unitOfWork.CommitAsync();
 
-            await _cacheRepository.RemoveAsync("order");
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("order"));
 
             return order;
         }
@@ -90,7 +92,7 @@ namespace Ordering.Application.Services
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.CommitAsync();
 
-            await _cacheRepository.RemoveAsync("order");
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("order"));
 
             return order;
         }
@@ -103,7 +105,7 @@ namespace Ordering.Application.Services
             _unitOfWork.Orders.Remove(order);
             await _unitOfWork.CommitAsync();
 
-            await _cacheRepository.RemoveAsync("order");
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("order"));
         }
     }
 }

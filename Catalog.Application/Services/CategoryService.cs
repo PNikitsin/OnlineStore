@@ -3,6 +3,7 @@ using Catalog.Application.DTOs;
 using Catalog.Application.Exceptions;
 using Catalog.Domain.Entities;
 using Catalog.Domain.Interfaces;
+using Hangfire;
 
 namespace Catalog.Application.Services
 {
@@ -29,7 +30,8 @@ namespace Catalog.Application.Services
             }
 
             categories = await _unitOfWork.Categories.GetAllAsync();
-            await _cacheRepository.SetDataAsync("category", categories);
+
+            BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("category", categories));
 
             return categories;
         }
@@ -67,7 +69,8 @@ namespace Catalog.Application.Services
 
             await _unitOfWork.Categories.AddAsync(category);
             await _unitOfWork.CommitAsync();
-            await _cacheRepository.RemoveAsync("category");
+
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("category"));
 
             return category;
         }
@@ -83,7 +86,7 @@ namespace Catalog.Application.Services
             _unitOfWork.Categories.Update(category);
             await _unitOfWork.CommitAsync();
 
-            await _cacheRepository.RemoveAsync("category");
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("category"));
         }
 
         public async Task DeleteCategoryAsync(int id)
@@ -94,7 +97,7 @@ namespace Catalog.Application.Services
             _unitOfWork.Categories.Remove(category);
             await _unitOfWork.CommitAsync();
 
-            await _cacheRepository.RemoveAsync("category");
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("category"));
         }
     }
 }

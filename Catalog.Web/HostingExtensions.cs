@@ -5,6 +5,7 @@ using Catalog.Infrastructure.Data;
 using Catalog.Infrastructure.Data.Repositories;
 using Catalog.Web.Extensions;
 using Catalog.Web.Middleware;
+using Hangfire;
 
 namespace Catalog.Web
 {
@@ -21,6 +22,7 @@ namespace Catalog.Web
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
             builder.Services.AddAutoMapper(typeof(AppMapperProfile));
             builder.Services.AddRedis(builder.Configuration);
+            builder.Services.AddHangfire(builder.Configuration);
             builder.Services.AddControllers();
             builder.Services.AddValidation();
             builder.Services.AddEndpointsApiExplorer();
