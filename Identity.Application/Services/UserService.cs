@@ -28,6 +28,14 @@ namespace Identity.Application.Services
             ITokenService tokenService,
             IMapper mapper,
             IBus bus)
+        {
+            _userManager = userManager;
+            _userClient = userClient;
+            _configuration = configuration;
+            _tokenService = tokenService;
+            _mapper = mapper;
+            _bus = bus;
+        }
             
         public async Task<RegisterUserDto> UserRegistrationAsync(RegisterUserDto registerUserDto)
         {
@@ -74,7 +82,7 @@ namespace Identity.Application.Services
             await enpoint.Send(deleteUserMessageDto);
         }
 
-        public async Task<AuthorizationDto> UserAuthorizationAsync(LoginUserDto loginUserDto, string secretKey)
+        public async Task<AuthorizationDto> UserAuthorizationAsync(LoginUserDto loginUserDto)
         {
             var user = await _userManager.FindByNameAsync(loginUserDto.UserName);
 
@@ -100,12 +108,15 @@ namespace Identity.Application.Services
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
             }
 
+            var secretKey = _configuration.GetSection("Token:Key").Value!;
+            var token = _tokenService.GenerateToken(authClaims, secretKey);
+
             var authorizationDto = new AuthorizationDto()
             {
                 UserName = user.UserName,
                 Email = user.Email,
                 Roles = userRoles.ToList(),
-                Token = _tokenService.GenerateToken(authClaims, secretKey)
+                Token = token
             };
 
             return authorizationDto;
