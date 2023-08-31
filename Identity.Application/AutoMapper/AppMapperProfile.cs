@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Identity.Application.DTOs;
 using Identity.Domain.Entities;
 using OnlineStore.Shared;

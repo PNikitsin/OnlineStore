@@ -1,5 +1,7 @@
-using Catalog.Web;
+using Catalog.Web.Configurations;
 using Serilog;
+
+SerilogConfiguration.ConfigureLogging();
 
 Log.Information("Starting up");
 
@@ -7,10 +9,7 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host.UseSerilog((context, configuration) =>
-    {
-        configuration.ReadFrom.Configuration(context.Configuration);
-    });
+    builder.Host.UseSerilog();
 
     var app = builder
         .ConfigureServices()
@@ -18,9 +17,14 @@ try
 
     app.Run();
 }
-catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException" && ex.GetType().Name is not "HostAbortedException")
+catch (HostAbortedException ex)
 {
-    Log.Fatal(ex, "Unhandled exception");
+    Log.Fatal(ex.Message);
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex.Message);
+    Log.Information("Unhandled exception");
 }
 finally
 {

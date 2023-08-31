@@ -1,4 +1,6 @@
-﻿namespace Identity.Application.DTOs
+using System.ComponentModel.DataAnnotations;
+
+namespace Identity.Application.DTOs
 {
     public class LoginUserDto
     {

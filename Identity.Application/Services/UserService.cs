@@ -1,14 +1,14 @@
-﻿using Identity.Application.DTOs;
+using Identity.Application.Grpc;
+using MassTransit;
+using OnlineStore.Shared;
+using Microsoft.Extensions.Configuration;
+using Identity.Application.DTOs;
 using Identity.Application.Exceptions;
 using Identity.Domain.Entities;
 using Identity.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using AutoMapper;
-using Identity.Application.Grpc;
-using MassTransit;
-using OnlineStore.Shared;
-using Microsoft.Extensions.Configuration;
 
 namespace Identity.Application.Services
 {
@@ -27,17 +27,8 @@ namespace Identity.Application.Services
             IConfiguration configuration,
             ITokenService tokenService,
             IMapper mapper,
-            IBus bus
-            )
-        {
-            _userManager = userManager;
-            _userClient = userClient;
-            _configuration = configuration;
-            _tokenService = tokenService;
-            _mapper = mapper;
-            _bus = bus;
-        }
-
+            IBus bus)
+            
         public async Task<RegisterUserDto> UserRegistrationAsync(RegisterUserDto registerUserDto)
         {
             var user = _userManager.Users.FirstOrDefault(user => user.UserName == registerUserDto.UserName || user.Email == registerUserDto.Email);
