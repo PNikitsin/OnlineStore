@@ -12,7 +12,8 @@ namespace Catalog.Web.Extensions
                 .AddValidatorsFromAssemblyContaining<CreateCategoryDtoValidator>()
                 .AddValidatorsFromAssemblyContaining<UpdateCategoryDtoValidator>()
                 .AddValidatorsFromAssemblyContaining<CreateProductDtoValidator>()
-                .AddValidatorsFromAssemblyContaining<UpdateProductDtoValidator>();
+                .AddValidatorsFromAssemblyContaining<UpdateProductDtoValidator>()
+                .AddValidatorsFromAssemblyContaining<CreateReportDtoValidator>();
         }
     }
 }

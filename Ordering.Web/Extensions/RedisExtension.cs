@@ -1,4 +1,7 @@
-﻿namespace Ordering.Web.Extensions
+﻿using Ordering.Domain.Interfaces;
+using Ordering.Infrastructure.Data.Repositories;
+
+namespace Ordering.Web.Extensions
 {
     public static class RedisExtension
     {
@@ -8,6 +11,8 @@
             {
                 options.Configuration = configuration["Redis:Uri"];
             });
+
+            services.AddScoped<ICacheRepository, CacheRepository>();
         }
     }
 }
