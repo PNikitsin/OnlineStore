@@ -5,12 +5,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAccessToken(builder.Configuration);
 builder.Services.AddSignalR();
+builder.Services.AddCorsPolicy();
 
 var app = builder.Build();
 
-app.UseDefaultFiles();
-
-app.UseStaticFiles();
+app.UseCors("CORSPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -24,10 +24,10 @@
     <div id="chatroom"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script>
-        let token;      
-        let username;  
+        let token;
+        let username;
         const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("/chat", { accessTokenFactory: () => token })
+            .withUrl("https://localhost:7084/chat", { accessTokenFactory: () => token })
             .build();
 
         document.getElementById("loginBtn").addEventListener("click", async () => {
@@ -48,7 +48,7 @@
                 username = data.userName;
                 document.getElementById("loginBtn").disabled = true;
 
-                hubConnection.start()     
+                hubConnection.start()
                     .then(() => document.getElementById("sendBtn").disabled = false)
                     .catch(err => console.error(err.toString()));
             }
@@ -74,15 +74,6 @@
             elem.appendChild(document.createTextNode(message));
 
             var firstElem = document.getElementById("chatroom").firstChild;
-            document.getElementById("chatroom").insertBefore(elem, firstElem);
-        });
-
-        hubConnection.on("Notify", message => {
-
-            const elem = document.createElement("p");
-            elem.textContent = message;
-
-            const firstElem = document.getElementById("chatroom").firstChild;
             document.getElementById("chatroom").insertBefore(elem, firstElem);
         });
     </script>
