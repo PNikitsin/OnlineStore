@@ -1,4 +1,5 @@
 ﻿using Ocelot.DependencyInjection;
+using OnlineStore.Gateway.Extensions;
 
 namespace OnlineStore.Gateway.Configurations
 {
@@ -11,6 +12,7 @@ namespace OnlineStore.Gateway.Configurations
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddCorsPolicy();
 
             return builder.Build();
         }

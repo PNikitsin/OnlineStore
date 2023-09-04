@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Messenger</title>
+</head>
+<body>
+    <div id="loginBlock">
+        <p>
+            Введите логин:<br />
+            <input id="userName" type="text" />
+        </p>
+        <p>
+            Введите пароль:<br />
+            <input id="password" type="password" />
+        </p>
+        <input id="loginBtn" type="button" value="Войти" />
+    </div><br />
+
+    <div id="inputForm">
+        <input type="text" id="message" />
+        <input type="button" id="sendBtn" disabled value="Отправить" />
+    </div>
+    <div id="chatroom"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script>
+        let token;      
+        let username;  
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/chat", { accessTokenFactory: () => token })
+            .build();
+
+        document.getElementById("loginBtn").addEventListener("click", async () => {
+
+            const response = await fetch("https://localhost:7120/gateway/account/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userName: document.getElementById("userName").value,
+                    password: document.getElementById("password").value
+                })
+            });
+
+            if (response.ok === true) {
+
+                const data = await response.json();
+                token = data.token;
+                username = data.userName;
+                document.getElementById("loginBtn").disabled = true;
+
+                hubConnection.start()     
+                    .then(() => document.getElementById("sendBtn").disabled = false)
+                    .catch(err => console.error(err.toString()));
+            }
+            else {
+                console.log(`Status: ${response.status}`);
+            }
+        });
+
+        document.getElementById("sendBtn").addEventListener("click", () => {
+
+            const message = document.getElementById("message").value;
+            hubConnection.invoke("Send", message, username)
+                .catch(error => console.error(error));
+        });
+
+        hubConnection.on("Receive", (message, user) => {
+
+            const userNameElem = document.createElement("b");
+            userNameElem.textContent = `${user}: `;
+
+            const elem = document.createElement("p");
+            elem.appendChild(userNameElem);
+            elem.appendChild(document.createTextNode(message));
+
+            var firstElem = document.getElementById("chatroom").firstChild;
+            document.getElementById("chatroom").insertBefore(elem, firstElem);
+        });
+
+        hubConnection.on("Notify", message => {
+
+            const elem = document.createElement("p");
+            elem.textContent = message;
+
+            const firstElem = document.getElementById("chatroom").firstChild;
+            document.getElementById("chatroom").insertBefore(elem, firstElem);
+        });
+    </script>
+</body>
+</html>

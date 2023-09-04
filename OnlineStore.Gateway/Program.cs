@@ -17,14 +17,9 @@ try
 
     app.Run();
 }
-catch (HostAbortedException ex)
+catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException" && ex.GetType().Name is not "HostAbortedException")
 {
-    Log.Fatal(ex.Message);
-}
-catch (Exception ex)
-{
-    Log.Fatal(ex.Message);
-    Log.Information("Unhandled exception");
+    Log.Fatal(ex, "Unhandled exception");
 }
 finally
 {
