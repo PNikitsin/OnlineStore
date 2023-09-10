@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using Catalog.Application.DTOs;
 using Catalog.Application.Exceptions;
+using Catalog.Application.Services.Interfaces;
 using Catalog.Domain.Entities.Mongo;
 using Catalog.Domain.Interfaces;
 using Hangfire;
 using Microsoft.AspNetCore.Http;
 
-namespace Catalog.Application.Services
+namespace Catalog.Application.Services.Implementations
 {
     public class ReportService : IReportService
     {
@@ -35,7 +36,7 @@ namespace Catalog.Application.Services
             {
                 return reports;
             }
-            
+
             reports = await _reportRepository.GetAllAsync();
 
             BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("report", reports));
@@ -45,22 +46,17 @@ namespace Catalog.Application.Services
 
         public async Task<Report> GetReportAsync(string id)
         {
-            Report report;
+            Report report = new();
             var reports = await _cacheRepository.GetDataAsync<IEnumerable<Report>>("report");
 
             if (reports != null)
             {
                 report = reports.FirstOrDefault(report => report.Id == id)!;
-
-                if (report != null)
-                {
-                    return report;
-                }
             }
 
-            report = await _reportRepository.GetByIdAsync(id);
+            var reportResult = report is null ? await _reportRepository.GetByIdAsync(id) : report;
 
-            return report ?? throw new NotFoundException("Report not found");
+            return reportResult ?? throw new NotFoundException("Report not found");
         }
 
         public async Task<Report> CreateReport(CreateReportDto createReportDto)
@@ -81,7 +77,7 @@ namespace Catalog.Application.Services
         {
             var report = _reportRepository.GetByIdAsync(id)
                 ?? throw new NotFoundException("Report not found");
-            
+
             await _reportRepository.DeleteAsync(id);
 
             BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("report"));

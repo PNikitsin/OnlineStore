@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Catalog.Application.DTOs;
 using Catalog.Application.Exceptions;
+using Catalog.Application.Services.Interfaces;
 using Catalog.Domain.Entities;
 using Catalog.Domain.Interfaces;
 using Hangfire;
 
-namespace Catalog.Application.Services
+namespace Catalog.Application.Services.Implementations
 {
     public class ProductService : IProductService
     {
@@ -38,22 +39,17 @@ namespace Catalog.Application.Services
 
         public async Task<Product> GetProductAsync(int id)
         {
-            Product product;
+            Product product = new();
             var products = await _cacheRepository.GetDataAsync<IEnumerable<Product>>("product");
 
             if (products != null)
             {
                 product = products.FirstOrDefault(product => product.Id == id)!;
-
-                if (product != null)
-                {
-                    return product;
-                }
             }
 
-            product = await _unitOfWork.Products.GetAsync(product => product.Id == id);
+            var productResult = product is null ? await _unitOfWork.Products.GetAsync(product => product.Id == id) : product;
 
-            return product ?? throw new NotFoundException("Product not found");
+            return productResult ?? throw new NotFoundException("Product not found");
         }
 
         public async Task<Product> CreateProductAsync(CreateProductDto createProductDto)
