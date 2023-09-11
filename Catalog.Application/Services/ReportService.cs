@@ -45,22 +45,17 @@ namespace Catalog.Application.Services
 
         public async Task<Report> GetReportAsync(string id)
         {
-            Report report;
+            Report report = new();
             var reports = await _cacheRepository.GetDataAsync<IEnumerable<Report>>("report");
 
             if (reports != null)
             {
                 report = reports.FirstOrDefault(report => report.Id == id)!;
-
-                if (report != null)
-                {
-                    return report;
-                }
             }
 
-            report = await _reportRepository.GetByIdAsync(id);
+            var resultReport = report is null ? await _reportRepository.GetByIdAsync(id) : report;
 
-            return report ?? throw new NotFoundException("Report not found");
+            return resultReport ?? throw new NotFoundException("Report not found");
         }
 
         public async Task<Report> CreateReport(CreateReportDto createReportDto)

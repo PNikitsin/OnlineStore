@@ -19,7 +19,7 @@ namespace Identity.Web
             builder.Services.AddValidation();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddMessageBroker(builder.Configuration);
+            builder.Services.AddMessageBroker();
 
             return builder.Build();
         }
