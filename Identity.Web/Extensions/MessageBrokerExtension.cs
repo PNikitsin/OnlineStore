@@ -10,6 +10,8 @@ namespace Identity.Web.Extensions
             {
                 config.UsingRabbitMq();
             });
+
+            services.AddMassTransitHostedService();
         }
     }
 }

@@ -1,185 +1,185 @@
 {
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:5003"
+    "BaseUrl": "onlinestore.gateway,443"
   },
   "Routes": [
     {
-      "UpstreamPathTemplate": "/gateway/category",
+      "UpstreamPathTemplate": "/category",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/category",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "catalog.web",
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/category/{id}",
+      "UpstreamPathTemplate": "/category/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ],
       "DownstreamPathTemplate": "/api/category/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "catalog.web",
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/category",
+      "UpstreamPathTemplate": "/category",
       "UpstreamHttpMethod": [ "Post", "Put" ],
       "DownstreamPathTemplate": "/api/category",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "catalog.web",
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/product",
+      "UpstreamPathTemplate": "/product",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/product",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "catalog.web",
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/product/{id}",
+      "UpstreamPathTemplate": "/product/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ],
       "DownstreamPathTemplate": "/api/product/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "catalog.web",
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/product",
+      "UpstreamPathTemplate": "/product",
       "UpstreamHttpMethod": [ "Post", "Put" ],
       "DownstreamPathTemplate": "/api/product",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "catalog.web",
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/report",
+      "UpstreamPathTemplate": "/report",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/report",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "catalog.web",
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/report/{id}",
+      "UpstreamPathTemplate": "/report/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ],
       "DownstreamPathTemplate": "/api/report/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "catalog.web",
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/report",
+      "UpstreamPathTemplate": "/report",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/report",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "catalog.web",
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/account/register",
+      "UpstreamPathTemplate": "/account/register",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/account/register",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/account/login",
+      "UpstreamPathTemplate": "/account/login",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamPathTemplate": "/api/account/login",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/account/delete",
+      "UpstreamPathTemplate": "/account/delete",
       "UpstreamHttpMethod": [ "Delete" ],
       "DownstreamPathTemplate": "/api/account/delete",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/order",
+      "UpstreamPathTemplate": "/order",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/order",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5002
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/order/{id}",
+      "UpstreamPathTemplate": "/order/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ],
       "DownstreamPathTemplate": "/api/order/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5002
+          "Port": 80
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/gateway/order",
+      "UpstreamPathTemplate": "/order",
       "UpstreamHttpMethod": [ "Post", "Put" ],
       "DownstreamPathTemplate": "/api/order",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5002
+          "Port": 80
         }
       ]
     }
