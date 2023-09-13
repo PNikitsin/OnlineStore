@@ -1,17 +1,16 @@
 using Identity.Infrastructure.Data;
-using Identity.Web;
 using Serilog;
+using Identity.Web.Configurations;
+
+SerilogConfiguration.ConfigureLogging();
 
 Log.Information("Starting up");
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-
-    builder.Host.UseSerilog((context, configuration) =>
-    {
-        configuration.ReadFrom.Configuration(context.Configuration);
-    });
+    
+    builder.Host.UseSerilog();
 
     var app = builder
         .ConfigureServices()

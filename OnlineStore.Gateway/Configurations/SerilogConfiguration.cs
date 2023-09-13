@@ -3,8 +3,9 @@ using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
 
-namespace Catalog.Web.Configurations
+namespace OnlineStore.Gateway.Configurations
 {
+    public static class SerilogConfiguration
     {
         public static void ConfigureLogging()
         {

@@ -1,4 +1,4 @@
-﻿using Identity.Application.DTOs;
+using Identity.Application.DTOs;
 using Identity.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +8,10 @@ namespace Identity.Web.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
 
-        public AccountController(IConfiguration configuration, IUserService userService)
+        public AccountController(IUserService userService)
         {
-            _configuration = configuration;
             _userService = userService;
         }
 
@@ -29,10 +27,9 @@ namespace Identity.Web.Controllers
         [Route("login")]
         public async Task<IActionResult> LoginAsync(LoginUserDto loginUserDto)
         {
-            var secretKey = _configuration.GetValue<string>("Token:Key");
-            var token = await _userService.UserAuthorizationAsync(loginUserDto, secretKey);
+            var authorizationDto = await _userService.UserAuthorizationAsync(loginUserDto);
 
-            return Ok(token);
+            return Ok(authorizationDto);
         }
 
         [HttpDelete]

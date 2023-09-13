@@ -1,34 +1,28 @@
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
+using OnlineStore.Gateway.Configurations;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+SerilogConfiguration.ConfigureLogging();
 
-builder.Host.UseSerilog((context, configuration) =>
+Log.Information("Starting up");
+
+try
 {
-    configuration.ReadFrom.Configuration(context.Configuration);
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
-builder.Services.AddOcelot(builder.Configuration);
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    builder.Host.UseSerilog();
 
-var app = builder.Build();
+    var app = builder
+        .ConfigureServices()
+        .ConfigurePipeline();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-await app.UseOcelot();
-
-app.Run();
+catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException" && ex.GetType().Name is not "HostAbortedException")
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+}
