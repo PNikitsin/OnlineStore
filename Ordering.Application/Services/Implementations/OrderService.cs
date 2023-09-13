@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Ordering.Application.DTOs;
@@ -47,22 +47,18 @@ namespace Ordering.Application.Services.Implementations
 
         public async Task<Order> GetOrderAsync(Guid id)
         {
-            Order order;
+            Order order = new();
+
             var orders = await _cacheRepository.GetDataAsync<IEnumerable<Order>>("order");
 
             if (orders != null)
             {
                 order = orders.FirstOrDefault(order => order.Id == order.Id)!;
-
-                if (order != null)
-                {
-                    return order;
-                }
             }
 
-            order = await _unitOfWork.Orders.GetAsync(order => order.Id == id);
+            var orderResult = order is null ? await _unitOfWork.Orders.GetAsync(order => order.Id == id) : order;
 
-            return order ?? throw new NotFoundException("OrderNotFound");
+            return orderResult ?? throw new NotFoundException("OrderNotFound");
         }
 
         public async Task<Order> CreateOrderAsync(CreateOrderDto orderDto)

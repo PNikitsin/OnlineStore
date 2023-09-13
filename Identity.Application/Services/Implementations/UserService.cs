@@ -1,7 +1,4 @@
-using Identity.Application.Grpc;
-using MassTransit;
-using OnlineStore.Shared;
-using Microsoft.Extensions.Configuration;
+
 using Identity.Application.DTOs;
 using Identity.Application.Exceptions;
 using Identity.Domain.Entities;
@@ -9,6 +6,10 @@ using Identity.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using AutoMapper;
+using Identity.Application.Grpc;
+using MassTransit;
+using OnlineStore.Shared;
+using Microsoft.Extensions.Configuration;
 using Identity.Application.Services.Interfaces;
 
 namespace Identity.Application.Services.Implementations

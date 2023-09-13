@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Catalog.Application.DTOs;
 using Catalog.Domain.Entities;
+using Catalog.Domain.Entities.Mongo;
 
 namespace Catalog.Application.AutoMapper
 {
@@ -12,6 +13,7 @@ namespace Catalog.Application.AutoMapper
             CreateMap<UpdateCategoryDto, Category>();
             CreateMap<CreateProductDto, Product>();
             CreateMap<UpdateProductDto, Product>();
+            CreateMap<CreateReportDto, Report>();
         }
     }
 } 

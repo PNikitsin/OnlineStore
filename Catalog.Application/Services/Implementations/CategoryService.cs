@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Catalog.Application.DTOs;
 using Catalog.Application.Exceptions;
 using Catalog.Application.Services.Interfaces;
@@ -39,22 +39,18 @@ namespace Catalog.Application.Services.Implementations
 
         public async Task<Category> GetCategoryAsync(int id)
         {
-            Category category;
+            Category category = new();
+
             var categories = await _cacheRepository.GetDataAsync<IEnumerable<Category>>("category");
 
             if (categories != null)
             {
                 category = categories.FirstOrDefault(category => category.Id == id)!;
-
-                if (category != null)
-                {
-                    return category;
-                }
             }
 
-            category = await _unitOfWork.Categories.GetAsync(category => category.Id == id);
+            var categoryResult = category is null ? await _unitOfWork.Categories.GetAsync(category => category.Id == id) : category;
 
-            return category ?? throw new NotFoundException("Category not found");
+            return categoryResult ?? throw new NotFoundException("Category not found");
         }
 
         public async Task<Category> CreateCategoryAsync(CreateCategoryDto createCategoryDto)
