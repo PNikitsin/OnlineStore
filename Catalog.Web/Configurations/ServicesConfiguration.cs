@@ -6,12 +6,10 @@ using Catalog.Infrastructure.Data;
 using Catalog.Infrastructure.Data.Mongo;
 using Catalog.Infrastructure.Data.Repositories;
 using Catalog.Web.Extensions;
-using Catalog.Web.Middleware;
-using Hangfire;
 
-namespace Catalog.Web
+namespace Catalog.Web.Configurations
 {
-    public static class HostingExtensions
+    public static class ServicesConfiguration
     {
         public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
         {
@@ -35,26 +33,6 @@ namespace Catalog.Web
             builder.Services.AddSwaggerUI();
 
             return builder.Build();
-        }
-
-        public static WebApplication ConfigurePipeline(this WebApplication app)
-        {
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseMiddleware<ErrorHandlerMiddleware>();
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            return app;
         }
     }
 }

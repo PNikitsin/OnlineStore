@@ -2,11 +2,10 @@
 using Identity.Application.Services.Implementations;
 using Identity.Application.Services.Interfaces;
 using Identity.Web.Extensions;
-using Identity.Web.Middleware;
 
-namespace Identity.Web
+namespace Identity.Web.Configurations
 {
-    internal static class HostingExtensions
+    public static class ServicesConfiguration
     {
         public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
         {
@@ -23,25 +22,6 @@ namespace Identity.Web
             builder.Services.AddMessageBroker(builder.Configuration);
 
             return builder.Build();
-        }
-
-        public static WebApplication ConfigurePipeline(this WebApplication app)
-        {
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseMiddleware<ErrorHandlerMiddleware>();
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            return app;
         }
     }
 }

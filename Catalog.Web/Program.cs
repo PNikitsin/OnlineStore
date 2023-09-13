@@ -1,5 +1,7 @@
-using Catalog.Web;
+using Catalog.Web.Configurations;
 using Serilog;
+
+SerilogConfiguration.ConfigureLogging();
 
 Log.Information("Starting up");
 
@@ -7,10 +9,7 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host.UseSerilog((context, configuration) =>
-    {
-        configuration.ReadFrom.Configuration(context.Configuration);
-    });
+    builder.Host.UseSerilog();
 
     var app = builder
         .ConfigureServices()

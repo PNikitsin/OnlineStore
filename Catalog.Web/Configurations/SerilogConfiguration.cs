@@ -3,7 +3,7 @@ using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
 
-namespace Ordering.Web.Configurations
+namespace Catalog.Web.Configurations
 {
     public static class SerilogConfiguration
     {
@@ -32,4 +32,4 @@ namespace Ordering.Web.Configurations
                 .CreateLogger();
         }
     }
-}
+} 
