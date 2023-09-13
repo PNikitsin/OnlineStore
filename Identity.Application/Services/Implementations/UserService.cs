@@ -9,8 +9,9 @@ using Identity.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using AutoMapper;
+using Identity.Application.Services.Interfaces;
 
-namespace Identity.Application.Services
+namespace Identity.Application.Services.Implementations
 {
     public class UserService : IUserService
     {
@@ -36,7 +37,7 @@ namespace Identity.Application.Services
             _mapper = mapper;
             _bus = bus;
         }
-            
+
         public async Task<RegisterUserDto> UserRegistrationAsync(RegisterUserDto registerUserDto)
         {
             var user = _userManager.Users.FirstOrDefault(user => user.UserName == registerUserDto.UserName || user.Email == registerUserDto.Email);
@@ -88,7 +89,7 @@ namespace Identity.Application.Services
 
             if (user == null)
             {
-                throw new NotFoundException($"Username is incorrect"); 
+                throw new NotFoundException($"Username is incorrect");
             }
 
             if (!await _userManager.CheckPasswordAsync(user, loginUserDto.Password))

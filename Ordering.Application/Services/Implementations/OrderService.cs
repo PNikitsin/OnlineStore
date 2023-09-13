@@ -3,16 +3,17 @@ using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Ordering.Application.DTOs;
 using Ordering.Application.Exceptions;
+using Ordering.Application.Services.Interfaces;
 using Ordering.Domain.Entities;
 using Ordering.Domain.Enums;
 using Ordering.Domain.Interfaces;
 
-namespace Ordering.Application.Services
+namespace Ordering.Application.Services.Implementations
 {
     public class OrderService : IOrderService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IUnitOfWork _unitOfWork; 
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ICacheRepository _cacheRepository;
 

@@ -1,5 +1,6 @@
 ﻿using Catalog.Application.AutoMapper;
-using Catalog.Application.Services;
+using Catalog.Application.Services.Implementations;
+using Catalog.Application.Services.Interfaces;
 using Catalog.Domain.Interfaces;
 using Catalog.Infrastructure.Data;
 using Catalog.Infrastructure.Data.Repositories;

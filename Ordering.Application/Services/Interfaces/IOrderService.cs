@@ -1,7 +1,7 @@
 ﻿using Ordering.Application.DTOs;
 using Ordering.Domain.Entities;
 
-namespace Ordering.Application.Services
+namespace Ordering.Application.Services.Interfaces
 {
     public interface IOrderService
     {

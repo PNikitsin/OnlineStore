@@ -1,5 +1,6 @@
 ﻿using Ordering.Application.AutoMapper;
-using Ordering.Application.Services;
+using Ordering.Application.Services.Implementations;
+using Ordering.Application.Services.Interfaces;
 using Ordering.Domain.Interfaces;
 using Ordering.Infrastructure.Data;
 using Ordering.Web.Extensions;

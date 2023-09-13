@@ -1,7 +1,7 @@
 ﻿using Catalog.Application.DTOs;
 using Catalog.Domain.Entities;
 
-namespace Catalog.Application.Services
+namespace Catalog.Application.Services.Interfaces
 {
     public interface ICategoryService
     {
