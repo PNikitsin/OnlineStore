@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Catalog.Application.DTOs;
 using Catalog.Application.Exceptions;
 using Catalog.Application.Services.Interfaces;
@@ -40,6 +40,7 @@ namespace Catalog.Application.Services.Implementations
         public async Task<Product> GetProductAsync(int id)
         {
             Product product = new();
+            
             var products = await _cacheRepository.GetDataAsync<IEnumerable<Product>>("product");
 
             if (products != null)

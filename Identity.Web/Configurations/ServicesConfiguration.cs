@@ -1,4 +1,4 @@
-﻿using Identity.Application.AutoMapper;
+using Identity.Application.AutoMapper;
 using Identity.Application.Services.Implementations;
 using Identity.Application.Services.Interfaces;
 using Identity.Web.Extensions;

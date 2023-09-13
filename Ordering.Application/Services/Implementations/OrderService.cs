@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Ordering.Application.DTOs;
@@ -48,6 +48,7 @@ namespace Ordering.Application.Services.Implementations
         public async Task<Order> GetOrderAsync(Guid id)
         {
             Order order = new();
+
             var orders = await _cacheRepository.GetDataAsync<IEnumerable<Order>>("order");
 
             if (orders != null)

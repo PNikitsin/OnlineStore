@@ -1,7 +1,7 @@
-﻿using Serilog;
-using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
+using Serilog;
 using System.Reflection;
+using Serilog.Exceptions;
 
 namespace Catalog.Web.Configurations
 {

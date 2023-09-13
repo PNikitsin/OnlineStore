@@ -1,4 +1,4 @@
-﻿using Catalog.Application.AutoMapper;
+using Catalog.Application.AutoMapper;
 using Catalog.Application.Services.Implementations;
 using Catalog.Application.Services.Interfaces;
 using Catalog.Domain.Interfaces;
