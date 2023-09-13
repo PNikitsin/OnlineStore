@@ -1,4 +1,4 @@
-using Catalog.Web;
+using Catalog.Web.Configurations;
 using Serilog;
 
 Log.Information("Starting up");
