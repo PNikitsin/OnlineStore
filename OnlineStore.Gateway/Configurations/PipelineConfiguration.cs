@@ -12,6 +12,8 @@ namespace OnlineStore.Gateway.Configurations
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("CORSPolicy");
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
