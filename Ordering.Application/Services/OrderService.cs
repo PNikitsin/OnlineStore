@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Ordering.Application.DTOs;
 using Ordering.Application.Exceptions;
@@ -13,31 +14,54 @@ namespace Ordering.Application.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork; 
         private readonly IMapper _mapper;
+        private readonly ICacheRepository _cacheRepository;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public OrderService(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor,
+            ICacheRepository cacheRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _cacheRepository = cacheRepository;
         }
 
         public async Task<IEnumerable<Order>> GetOrdersAsync()
         {
-            var orders = await _unitOfWork.Orders.GetAllAsync();
+            var orders = await _cacheRepository.GetDataAsync<IEnumerable<Order>>("order");
+
+            if (orders != null)
+            {
+                return orders;
+            }
+
+            orders = await _unitOfWork.Orders.GetAllAsync();
+
+            BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("order", orders));
 
             return orders;
         }
 
         public async Task<Order> GetOrderAsync(Guid id)
         {
-            var order = await _unitOfWork.Orders.GetAsync(order => order.Id == id);
+            Order order;
+            var orders = await _cacheRepository.GetDataAsync<IEnumerable<Order>>("order");
 
-            if (order == null)
+            if (orders != null)
             {
-                throw new NotFoundException("OrderNotFound");
+                order = orders.FirstOrDefault(order => order.Id == order.Id)!;
+
+                if (order != null)
+                {
+                    return order;
+                }
             }
 
-            return order;
+            order = await _unitOfWork.Orders.GetAsync(order => order.Id == id);
+
+            return order ?? throw new NotFoundException("OrderNotFound");
         }
 
         public async Task<Order> CreateOrderAsync(CreateOrderDto orderDto)
@@ -55,6 +79,8 @@ namespace Ordering.Application.Services
             await _unitOfWork.Orders.AddAsync(order);
             await _unitOfWork.CommitAsync();
 
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("order"));
+
             return order;
         }
 
@@ -66,6 +92,8 @@ namespace Ordering.Application.Services
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.CommitAsync();
 
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("order"));
+
             return order;
         }
 
@@ -76,6 +104,8 @@ namespace Ordering.Application.Services
 
             _unitOfWork.Orders.Remove(order);
             await _unitOfWork.CommitAsync();
+
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("order"));
         }
     }
 }

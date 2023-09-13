@@ -3,6 +3,7 @@ using Catalog.Application.DTOs;
 using Catalog.Application.Exceptions;
 using Catalog.Domain.Entities;
 using Catalog.Domain.Interfaces;
+using Hangfire;
 
 namespace Catalog.Application.Services
 {
@@ -10,23 +11,47 @@ namespace Catalog.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ICacheRepository _cacheRepository;
 
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, ICacheRepository cacheRepository)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _cacheRepository = cacheRepository;
         }
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
-            var categories = await _unitOfWork.Categories.GetAllAsync();
+            var categories = await _cacheRepository.GetDataAsync<IEnumerable<Category>>("category");
+
+            if (categories != null)
+            {
+                return categories;
+            }
+
+            categories = await _unitOfWork.Categories.GetAllAsync();
+
+            BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("category", categories));
 
             return categories;
         }
 
         public async Task<Category> GetCategoryAsync(int id)
         {
-            var category = await _unitOfWork.Categories.GetAsync(category => category.Id == id);
+            Category category;
+            var categories = await _cacheRepository.GetDataAsync<IEnumerable<Category>>("category");
+
+            if (categories != null)
+            {
+                category = categories.FirstOrDefault(category => category.Id == id)!;
+
+                if (category != null)
+                {
+                    return category;
+                }
+            }
+
+            category = await _unitOfWork.Categories.GetAsync(category => category.Id == id);
 
             return category ?? throw new NotFoundException("Category not found");
         }
@@ -45,6 +70,8 @@ namespace Catalog.Application.Services
             await _unitOfWork.Categories.AddAsync(category);
             await _unitOfWork.CommitAsync();
 
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("category"));
+
             return category;
         }
 
@@ -58,6 +85,8 @@ namespace Catalog.Application.Services
 
             _unitOfWork.Categories.Update(category);
             await _unitOfWork.CommitAsync();
+
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("category"));
         }
 
         public async Task DeleteCategoryAsync(int id)
@@ -67,6 +96,8 @@ namespace Catalog.Application.Services
             
             _unitOfWork.Categories.Remove(category);
             await _unitOfWork.CommitAsync();
+
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("category"));
         }
     }
 }

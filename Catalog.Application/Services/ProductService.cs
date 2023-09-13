@@ -3,6 +3,7 @@ using Catalog.Application.DTOs;
 using Catalog.Application.Exceptions;
 using Catalog.Domain.Entities;
 using Catalog.Domain.Interfaces;
+using Hangfire;
 
 namespace Catalog.Application.Services
 {
@@ -10,23 +11,49 @@ namespace Catalog.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ICacheRepository _cacheRepository;
 
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, ICacheRepository cacheRepository)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _cacheRepository = cacheRepository;
         }
 
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
-            return await _unitOfWork.Products.GetAllAsync();
+            var products = await _cacheRepository.GetDataAsync<IEnumerable<Product>>("product");
+
+            if (products != null)
+            {
+                return products;
+            }
+
+            products = await _unitOfWork.Products.GetAllAsync();
+
+            BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("product", products));
+
+            return products;
         }
 
         public async Task<Product> GetProductAsync(int id)
         {
-            var category = await _unitOfWork.Products.GetAsync(category => category.Id == id);
+            Product product;
+            var products = await _cacheRepository.GetDataAsync<IEnumerable<Product>>("product");
 
-            return category ?? throw new NotFoundException("Product not found");
+            if (products != null)
+            {
+                product = products.FirstOrDefault(product => product.Id == id)!;
+
+                if (product != null)
+                {
+                    return product;
+                }
+            }
+
+            product = await _unitOfWork.Products.GetAsync(product => product.Id == id);
+
+            return product ?? throw new NotFoundException("Product not found");
         }
 
         public async Task<Product> CreateProductAsync(CreateProductDto createProductDto)
@@ -42,6 +69,8 @@ namespace Catalog.Application.Services
 
             await _unitOfWork.Products.AddAsync(product);
             await _unitOfWork.CommitAsync();
+
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("product"));
 
             return product;
         }
@@ -60,6 +89,8 @@ namespace Catalog.Application.Services
 
             _unitOfWork.Products.Update(product);
             await _unitOfWork.CommitAsync();
+
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("product"));
         }
 
         public async Task DeleteProductAsync(int id)
@@ -69,6 +100,8 @@ namespace Catalog.Application.Services
 
             _unitOfWork.Products.Remove(product);
             await _unitOfWork.CommitAsync();
+
+            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("product"));
         }
     }
 }

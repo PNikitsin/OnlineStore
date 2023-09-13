@@ -18,6 +18,8 @@ namespace Ordering.Web.Configurations
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddAutoMapper(typeof(AppMapperProfile));
             builder.Services.AddGrpc();
+            builder.Services.AddHangfire(builder.Configuration);
+            builder.Services.AddRedis(builder.Configuration);
             builder.Services.AddMessageBroker(builder.Configuration);
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

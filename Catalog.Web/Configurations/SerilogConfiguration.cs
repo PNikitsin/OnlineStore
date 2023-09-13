@@ -5,7 +5,6 @@ using System.Reflection;
 
 namespace Catalog.Web.Configurations
 {
-    public static class SerilogConfiguration
     {
         public static void ConfigureLogging()
         {
