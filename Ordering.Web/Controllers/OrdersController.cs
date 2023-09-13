@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ordering.Application.DTOs;
-using Ordering.Application.Services;
+using Ordering.Application.Services.Interfaces;
 
 namespace Ordering.Web.Controllers
 {
