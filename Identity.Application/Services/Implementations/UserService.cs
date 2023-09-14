@@ -9,8 +9,9 @@ using Identity.Application.Grpc;
 using MassTransit;
 using OnlineStore.Shared;
 using Microsoft.Extensions.Configuration;
+using Identity.Application.Services.Interfaces;
 
-namespace Identity.Application.Services
+namespace Identity.Application.Services.Implementations
 {
     public class UserService : IUserService
     {
@@ -84,7 +85,7 @@ namespace Identity.Application.Services
 
             if (user == null)
             {
-                throw new NotFoundException($"Username is incorrect"); 
+                throw new NotFoundException($"Username is incorrect");
             }
 
             if (!await _userManager.CheckPasswordAsync(user, loginUserDto.Password))

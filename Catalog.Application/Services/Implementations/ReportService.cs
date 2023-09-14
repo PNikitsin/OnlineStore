@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using Catalog.Application.DTOs;
 using Catalog.Application.Exceptions;
+using Catalog.Application.Services.Interfaces;
 using Catalog.Domain.Entities.Mongo;
 using Catalog.Domain.Interfaces;
 using Hangfire;
 using Microsoft.AspNetCore.Http;
 
-namespace Catalog.Application.Services
+namespace Catalog.Application.Services.Implementations
 {
     public class ReportService : IReportService
     {
@@ -35,7 +36,7 @@ namespace Catalog.Application.Services
             {
                 return reports;
             }
-            
+
             reports = await _reportRepository.GetAllAsync();
 
             BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("report", reports));
@@ -76,7 +77,7 @@ namespace Catalog.Application.Services
         {
             var report = _reportRepository.GetByIdAsync(id)
                 ?? throw new NotFoundException("Report not found");
-            
+
             await _reportRepository.DeleteAsync(id);
 
             BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("report"));

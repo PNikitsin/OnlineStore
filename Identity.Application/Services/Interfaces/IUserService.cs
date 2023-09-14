@@ -1,6 +1,6 @@
 ﻿using Identity.Application.DTOs;
 
-namespace Identity.Application.Services
+namespace Identity.Application.Services.Interfaces
 {
     public interface IUserService
     {

@@ -1,5 +1,5 @@
 ﻿using Catalog.Application.DTOs;
-using Catalog.Application.Services;
+using Catalog.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

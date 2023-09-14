@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Catalog.Application.DTOs;
 using Catalog.Application.Exceptions;
+using Catalog.Application.Services.Interfaces;
 using Catalog.Domain.Entities;
 using Catalog.Domain.Interfaces;
 using Hangfire;
 
-namespace Catalog.Application.Services
+namespace Catalog.Application.Services.Implementations
 {
     public class CategoryService : ICategoryService
     {
@@ -93,7 +94,7 @@ namespace Catalog.Application.Services
         {
             var category = await _unitOfWork.Categories.GetAsync(category => category.Id == id)
                 ?? throw new NotFoundException("Category not found");
-            
+
             _unitOfWork.Categories.Remove(category);
             await _unitOfWork.CommitAsync();
 

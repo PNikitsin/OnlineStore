@@ -3,7 +3,7 @@ using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
 
-namespace Ordering.Web.Configurations
+namespace Identity.Web.Configurations
 {
     public static class SerilogConfiguration
     {
