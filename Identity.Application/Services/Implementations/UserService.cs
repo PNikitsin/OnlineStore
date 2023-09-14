@@ -21,7 +21,7 @@ namespace Identity.Application.Services.Implementations
         private readonly ITokenService _tokenService;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
-        private readonly IBus _bus;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public UserService(
             UserManager<ApplicationUser> userManager,
@@ -29,14 +29,14 @@ namespace Identity.Application.Services.Implementations
             IConfiguration configuration,
             ITokenService tokenService,
             IMapper mapper,
-            IBus bus)
+            IPublishEndpoint publishEndpoint)
         {
             _userManager = userManager;
             _userClient = userClient;
             _configuration = configuration;
             _tokenService = tokenService;
             _mapper = mapper;
-            _bus = bus;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<RegisterUserDto> UserRegistrationAsync(RegisterUserDto registerUserDto)
@@ -77,11 +77,7 @@ namespace Identity.Application.Services.Implementations
 
             var deleteUserMessageDto = _mapper.Map<ApplicationUser, DeleteUserMessageDto>(user);
 
-            var queue = _configuration.GetSection("MessageBroker:userQueue").Value;
-            var url = new Uri(queue);
-
-            var enpoint = await _bus.GetSendEndpoint(url);
-            await enpoint.Send(deleteUserMessageDto);
+            await _publishEndpoint.Publish(deleteUserMessageDto);
         }
 
         public async Task<AuthorizationDto> UserAuthorizationAsync(LoginUserDto loginUserDto)

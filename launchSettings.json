@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "catalog.web": "StartDebugging",
+        "identity.web": "StartDebugging",
+        "ordering.web": "StartDebugging",
+        "onlinestore.chat": "StartDebugging",
+        "onlinestore.client": "StartDebugging",
+        "onlinestore.gateway": "StartDebugging"
+      }
+    }
+  }
+}

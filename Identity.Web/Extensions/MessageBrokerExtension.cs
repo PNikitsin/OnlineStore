@@ -4,21 +4,12 @@ namespace Identity.Web.Extensions
 {
     public static class MessageBrokerExtension
     {
-        public static void AddMessageBroker(this IServiceCollection services, IConfiguration configuration)
+        public static void AddMessageBroker(this IServiceCollection services)
         {
-            services.AddMassTransit(options =>
+            services.AddMassTransit(config =>
             {
-                options.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(RabbitConfiguration =>
-                {
-                    RabbitConfiguration.Host(new Uri(configuration["MessageBroker:Host"]), host =>
-                    {
-                        host.Username(configuration["MessageBroker:Username"]);
-                        host.Password(configuration["MessageBroker:Password"]);
-                    });
-                }));
+                config.UsingRabbitMq();
             });
-
-            services.AddMassTransitHostedService();
         }
     }
 }
