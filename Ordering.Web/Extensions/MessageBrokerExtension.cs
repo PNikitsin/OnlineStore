@@ -1,5 +1,5 @@
-﻿using GreenPipes;
-using MassTransit;
+﻿using MassTransit;
+using MassTransit.Definition;
 using Ordering.Web.MessageBroker;
 
 namespace Ordering.Web.Extensions
@@ -8,29 +8,19 @@ namespace Ordering.Web.Extensions
     {
         public static void AddMessageBroker(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMassTransit(options =>
+            services.AddMassTransit(config =>
             {
-                options.AddConsumer<UserConsumer>();
-                options.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(RabbitConfiguration =>
+                config.SetEndpointNameFormatter(
+                    new KebabCaseEndpointNameFormatter(prefix: "user", includeNamespace: false));
+
+                config.AddConsumers(typeof(UserConsumer).Assembly);
+
+                config.UsingRabbitMq((context, config) =>
                 {
-                    RabbitConfiguration.UseHealthCheck(provider);
-
-                    RabbitConfiguration.Host(new Uri(configuration["MessageBroker:Host"]), host =>
-                    {
-                        host.Username(configuration["MessageBroker:Username"]);
-                        host.Password(configuration["MessageBroker:Password"]);
-                    });
-
-                    RabbitConfiguration.ReceiveEndpoint(configuration["MessageBroker:Endpoint"], endpoint =>
-                    {
-                        endpoint.PrefetchCount = 16;
-                        endpoint.UseMessageRetry(r => r.Interval(2, 100));
-                        endpoint.ConfigureConsumer<UserConsumer>(provider);
-                    });
-                }));
+                    config.Host(configuration["MessageBroker:Host"], "/");
+                    config.ConfigureEndpoints(context);
+                });
             });
-
-            services.AddMassTransitHostedService();
         }
     }
 }

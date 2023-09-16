@@ -1,0 +1,73 @@
+version: '3.4'
+
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.6.2
+    depends_on:
+     - elasticsearch
+
+  mssqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssqlserver
+
+  cacheserver:
+    image: redis
+    container_name: cacheserver
+    ports:
+     - 6379:6379
+    environment:
+     - ALLOW_EMPTY_PASSWORD=yes
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    ports:
+     - 5672:5672
+     - 15672:15672
+  
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+     - 27017:27017
+
+  catalog.web:
+    image: ${DOCKER_REGISTRY-}catalogweb
+    build:
+      context: .
+      dockerfile: Catalog.Web/Dockerfile
+
+  identity.web:
+    image: ${DOCKER_REGISTRY-}identityweb
+    build:
+      context: .
+      dockerfile: Identity.Web/Dockerfile
+
+  ordering.web:
+    image: ${DOCKER_REGISTRY-}orderingweb
+    build:
+      context: .
+      dockerfile: Ordering.Web/Dockerfile
+
+  onlinestore.chat:
+    image: ${DOCKER_REGISTRY-}onlinestorechat
+    build:
+      context: .
+      dockerfile: OnlineStore.Chat/Dockerfile
+
+  onlinestore.client:
+    image: ${DOCKER_REGISTRY-}onlinestoreclient
+    build:
+      context: .
+      dockerfile: OnlineStore.Client/Dockerfile
+
+  onlinestore.gateway:
+    image: ${DOCKER_REGISTRY-}onlinestoregateway
+    build:
+      context: .
+      dockerfile: OnlineStore.Gateway/Dockerfile

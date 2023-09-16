@@ -16,13 +16,9 @@ try
         .ConfigureServices()
         .ConfigurePipeline();
 
-    if (args.Contains("/seed"))
-    {
-        Log.Information("Seeding database...");
-        await ApplicationDbContextSeed.SeedEssentialsAsync(app.Services);
-        Log.Information("Done seeding database. Exiting.");
-        return;
-    }
+    Log.Information("Seeding database...");
+    await ApplicationDbContextSeed.SeedEssentialsAsync(app.Services);
+    Log.Information("Done seeding database. Exiting.");
 
     app.Run();
 }
