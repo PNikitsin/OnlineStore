@@ -18,41 +18,46 @@ services:
   cacheserver:
     image: redis
     container_name: cacheserver
-    ports:
-     - 6379:6379
-    environment:
-     - ALLOW_EMPTY_PASSWORD=yes
 
   rabbitmq:
     image: rabbitmq:3.12-management
     container_name: rabbitmq
-    ports:
-     - 5672:5672
-     - 15672:15672
   
   mongodb:
     image: mongo
     container_name: mongodb
-    ports:
-     - 27017:27017
 
   catalog.web:
     image: ${DOCKER_REGISTRY-}catalogweb
     build:
       context: .
       dockerfile: Catalog.Web/Dockerfile
+    depends_on:
+    - mssqlserver
+    - mongodb
+    - cacheserver
+    - elasticsearch 
 
   identity.web:
     image: ${DOCKER_REGISTRY-}identityweb
     build:
       context: .
       dockerfile: Identity.Web/Dockerfile
+    depends_on:
+    - rabbitmq
+    - mssqlserver
+    - elasticsearch
 
   ordering.web:
     image: ${DOCKER_REGISTRY-}orderingweb
     build:
       context: .
       dockerfile: Ordering.Web/Dockerfile
+    depends_on:
+    - rabbitmq
+    - mssqlserver
+    - elasticsearch
+    - cacheserver
 
   onlinestore.chat:
     image: ${DOCKER_REGISTRY-}onlinestorechat

@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using MassTransit.Definition;
 using Ordering.Web.MessageBroker;
 
 namespace Ordering.Web.Extensions

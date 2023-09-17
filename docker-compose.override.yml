@@ -23,6 +23,21 @@ services:
     environment:
      - ACCEPT_EULA=y
      - SA_PASSWORD=Pass321$
+  
+  cacheserver:
+    ports:
+     - 6379:6379
+    environment:
+     - ALLOW_EMPTY_PASSWORD=yes
+  
+  rabbitmq:
+    ports:
+     - 5672:5672
+     - 15672:15672
+
+  mongodb:
+    ports:
+     - 27017:27017
 
   catalog.web:
     environment:
