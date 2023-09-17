@@ -5,7 +5,7 @@ namespace Catalog.Infrastructure.Data.Repositories
 {
     internal class ProductRepository : GenericRepository<Product>, IProductRepository
     {
-        public ProductRepository(AppDbContext dbContext)
+        public ProductRepository(ApplicationDbContext dbContext)
             : base(dbContext) { }
     }
 }

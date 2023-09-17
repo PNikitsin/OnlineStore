@@ -1,4 +1,6 @@
-﻿using Hangfire;
+﻿using Catalog.Infrastructure.Data;
+using Hangfire;
+using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Web.Extensions
 {
@@ -8,8 +10,15 @@ namespace Catalog.Web.Extensions
         {
             var connectionString = configuration.GetConnectionString("HangfireConnection");
 
-            services.AddHangfire(h => h.UseSqlServerStorage(connectionString));
+            services.AddHangfire(hangfire
+                => hangfire.UseSqlServerStorage(connectionString));
+
             services.AddHangfireServer();
+
+            services.AddDbContext<HangfireDbContext>(options
+                => options.UseSqlServer(connectionString));
+
+            services.BuildServiceProvider().GetService<HangfireDbContext>()?.Database.Migrate();
         }
     }
 }

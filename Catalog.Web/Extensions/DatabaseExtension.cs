@@ -9,10 +9,10 @@ namespace Catalog.Web.Extensions
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContext<AppDbContext>(options
+            services.AddDbContext<ApplicationDbContext>(options
                 => options.UseSqlServer(connectionString));
 
-            services.BuildServiceProvider().GetService<AppDbContext>()?.Database.Migrate();
+            services.BuildServiceProvider().GetService<ApplicationDbContext>()?.Database.Migrate();
         }
     }
 }

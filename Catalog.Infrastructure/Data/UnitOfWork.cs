@@ -5,9 +5,9 @@ namespace Catalog.Infrastructure.Data
 {
     public class UnitOfWork : IUnitOfWork
     {
-        protected readonly AppDbContext _dbContext;
+        protected readonly ApplicationDbContext _dbContext;
 
-        public UnitOfWork(AppDbContext dbContext)
+        public UnitOfWork(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
             Products = new ProductRepository(_dbContext);

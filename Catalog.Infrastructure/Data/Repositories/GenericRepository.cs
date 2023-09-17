@@ -6,9 +6,9 @@ namespace Catalog.Infrastructure.Data.Repositories
 {
     internal class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly AppDbContext _dbContext;
+        protected readonly ApplicationDbContext _dbContext;
 
-        public GenericRepository(AppDbContext dbContext)
+        public GenericRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
