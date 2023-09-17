@@ -10,15 +10,15 @@ namespace Catalog.Web.Extensions
         {
             var connectionString = configuration.GetConnectionString("HangfireConnection");
 
-            services.AddHangfire(hangfire
-                => hangfire.UseSqlServerStorage(connectionString));
-
-            services.AddHangfireServer();
-
             services.AddDbContext<HangfireDbContext>(options
                 => options.UseSqlServer(connectionString));
 
             services.BuildServiceProvider().GetService<HangfireDbContext>()?.Database.Migrate();
+
+            services.AddHangfire(hangfire
+                => hangfire.UseSqlServerStorage(connectionString));
+
+            services.AddHangfireServer();
         }
     }
 }
