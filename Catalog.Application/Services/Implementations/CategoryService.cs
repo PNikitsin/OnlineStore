@@ -13,12 +13,18 @@ namespace Catalog.Application.Services.Implementations
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ICacheRepository _cacheRepository;
+        private readonly IBackgroundJobClient _backgroundJobClient;
 
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, ICacheRepository cacheRepository)
+        public CategoryService(
+            IUnitOfWork unitOfWork, 
+            IMapper mapper, 
+            ICacheRepository cacheRepository, 
+            IBackgroundJobClient backgroundJobClient)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _cacheRepository = cacheRepository;
+            _backgroundJobClient = backgroundJobClient;
         }
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
@@ -32,7 +38,7 @@ namespace Catalog.Application.Services.Implementations
 
             categories = await _unitOfWork.Categories.GetAllAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("category", categories));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.SetDataAsync("category", categories));
 
             return categories;
         }
@@ -67,7 +73,7 @@ namespace Catalog.Application.Services.Implementations
             await _unitOfWork.Categories.AddAsync(category);
             await _unitOfWork.CommitAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("category"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("category"));
 
             return category;
         }
@@ -83,7 +89,7 @@ namespace Catalog.Application.Services.Implementations
             _unitOfWork.Categories.Update(category);
             await _unitOfWork.CommitAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("category"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("category"));
         }
 
         public async Task DeleteCategoryAsync(int id)
@@ -94,7 +100,7 @@ namespace Catalog.Application.Services.Implementations
             _unitOfWork.Categories.Remove(category);
             await _unitOfWork.CommitAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("category"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("category"));
         }
     }
 }

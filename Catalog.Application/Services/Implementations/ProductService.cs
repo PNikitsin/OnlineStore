@@ -13,12 +13,18 @@ namespace Catalog.Application.Services.Implementations
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ICacheRepository _cacheRepository;
+        private readonly IBackgroundJobClient _backgroundJobClient;
 
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, ICacheRepository cacheRepository)
+        public ProductService(
+            IUnitOfWork unitOfWork, 
+            IMapper mapper, 
+            ICacheRepository cacheRepository, 
+            IBackgroundJobClient backgroundJobClient)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _cacheRepository = cacheRepository;
+            _backgroundJobClient = backgroundJobClient;
         }
 
         public async Task<IEnumerable<Product>> GetProductsAsync()
@@ -32,7 +38,7 @@ namespace Catalog.Application.Services.Implementations
 
             products = await _unitOfWork.Products.GetAllAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("product", products));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.SetDataAsync("product", products));
 
             return products;
         }
@@ -67,7 +73,7 @@ namespace Catalog.Application.Services.Implementations
             await _unitOfWork.Products.AddAsync(product);
             await _unitOfWork.CommitAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("product"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("product"));
 
             return product;
         }
@@ -87,7 +93,7 @@ namespace Catalog.Application.Services.Implementations
             _unitOfWork.Products.Update(product);
             await _unitOfWork.CommitAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("product"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("product"));
         }
 
         public async Task DeleteProductAsync(int id)
@@ -98,7 +104,7 @@ namespace Catalog.Application.Services.Implementations
             _unitOfWork.Products.Remove(product);
             await _unitOfWork.CommitAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("product"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("product"));
         }
     }
 }

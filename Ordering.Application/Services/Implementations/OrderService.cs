@@ -16,17 +16,20 @@ namespace Ordering.Application.Services.Implementations
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ICacheRepository _cacheRepository;
+        private readonly IBackgroundJobClient _backgroundJobClient;
 
         public OrderService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IHttpContextAccessor httpContextAccessor,
-            ICacheRepository cacheRepository)
+            ICacheRepository cacheRepository,
+            IBackgroundJobClient backgroundJobClient)
         {
             _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _cacheRepository = cacheRepository;
+            _backgroundJobClient = backgroundJobClient;
         }
 
         public async Task<IEnumerable<Order>> GetOrdersAsync()
@@ -40,7 +43,7 @@ namespace Ordering.Application.Services.Implementations
 
             orders = await _unitOfWork.Orders.GetAllAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("order", orders));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.SetDataAsync("order", orders));
 
             return orders;
         }
@@ -76,7 +79,7 @@ namespace Ordering.Application.Services.Implementations
             await _unitOfWork.Orders.AddAsync(order);
             await _unitOfWork.CommitAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("order"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("order"));
 
             return order;
         }
@@ -89,7 +92,7 @@ namespace Ordering.Application.Services.Implementations
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.CommitAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("order"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("order"));
 
             return order;
         }
@@ -102,7 +105,7 @@ namespace Ordering.Application.Services.Implementations
             _unitOfWork.Orders.Remove(order);
             await _unitOfWork.CommitAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("order"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("order"));
         }
     }
 }

@@ -15,17 +15,20 @@ namespace Catalog.Application.Services.Implementations
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IMapper _mapper;
         private readonly ICacheRepository _cacheRepository;
+        private readonly IBackgroundJobClient _backgroundJobClient;
 
         public ReportService(
             IReportRepository reportRepository,
             IHttpContextAccessor contextAccessor,
             IMapper mapper,
-            ICacheRepository cacheRepository)
+            ICacheRepository cacheRepository,
+            IBackgroundJobClient backgroundJobClient)
         {
             _reportRepository = reportRepository;
             _contextAccessor = contextAccessor;
             _mapper = mapper;
             _cacheRepository = cacheRepository;
+            _backgroundJobClient = backgroundJobClient;
         }
 
         public async Task<IEnumerable<Report>> GetReportsAsync()
@@ -39,7 +42,7 @@ namespace Catalog.Application.Services.Implementations
 
             reports = await _reportRepository.GetAllAsync();
 
-            BackgroundJob.Enqueue(() => _cacheRepository.SetDataAsync("report", reports));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.SetDataAsync("report", reports));
 
             return reports;
         }
@@ -68,7 +71,7 @@ namespace Catalog.Application.Services.Implementations
 
             await _reportRepository.CreateAsync(report);
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("report"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("report"));
 
             return report;
         }
@@ -80,7 +83,7 @@ namespace Catalog.Application.Services.Implementations
 
             await _reportRepository.DeleteAsync(id);
 
-            BackgroundJob.Enqueue(() => _cacheRepository.RemoveAsync("report"));
+            _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("report"));
         }
     }
 }
