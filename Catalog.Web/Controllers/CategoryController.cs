@@ -40,7 +40,7 @@ namespace Catalog.Web.Controllers
         {
             var category = await _categoryService.CreateCategoryAsync(createCategoryDto);
 
-            return Created(nameof(GetCategoryAsync), new { id = category.Id });
+            return Ok(category);
         }
 
         [HttpPut]

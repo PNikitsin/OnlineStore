@@ -40,7 +40,7 @@ namespace Catalog.Web.Controllers
         {
             var product = await _productService.CreateProductAsync(productDto);
 
-            return Created("get-product", product.Id);
+            return Ok(product);
         }
 
         [HttpPut]
