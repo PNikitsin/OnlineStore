@@ -41,7 +41,7 @@ namespace Identity.Application.Services.Implementations
 
         public async Task<RegisterUserDto> UserRegistrationAsync(RegisterUserDto registerUserDto)
         {
-            var user = _userManager.Users.FirstOrDefault(user => user.UserName == registerUserDto.UserName || user.Email == registerUserDto.Email);
+            var user = await _userManager.FindByNameAsync(registerUserDto.UserName);
 
             if (user != null)
             {
