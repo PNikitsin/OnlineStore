@@ -86,7 +86,9 @@ namespace Ordering.Application.Services.Implementations
 
         public async Task<Order> UpdateOrderAsync(UpdateOrderDto updateOrderDto)
         {
-            var order = await _unitOfWork.Orders.GetAsync(order => order.Id == updateOrderDto.Id);
+            var order = await _unitOfWork.Orders.GetAsync(order => order.Id == updateOrderDto.Id) 
+                ?? throw new NotFoundException("Order not found");
+
             order.OrderStatus = updateOrderDto.Status.ToString();
 
             _unitOfWork.Orders.Update(order);
