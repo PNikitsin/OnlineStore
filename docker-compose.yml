@@ -1,0 +1,78 @@
+version: '3.4'
+
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.6.2
+    depends_on:
+     - elasticsearch
+
+  mssqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssqlserver
+
+  cacheserver:
+    image: redis
+    container_name: cacheserver
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+  
+  mongodb:
+    image: mongo
+    container_name: mongodb
+
+  catalog.web:
+    image: ${DOCKER_REGISTRY-}catalogweb
+    build:
+      context: .
+      dockerfile: Catalog.Web/Dockerfile
+    depends_on:
+    - mssqlserver
+    - mongodb
+    - cacheserver
+    - elasticsearch 
+
+  identity.web:
+    image: ${DOCKER_REGISTRY-}identityweb
+    build:
+      context: .
+      dockerfile: Identity.Web/Dockerfile
+    depends_on:
+    - rabbitmq
+    - mssqlserver
+    - elasticsearch
+
+  ordering.web:
+    image: ${DOCKER_REGISTRY-}orderingweb
+    build:
+      context: .
+      dockerfile: Ordering.Web/Dockerfile
+    depends_on:
+    - rabbitmq
+    - mssqlserver
+    - elasticsearch
+    - cacheserver
+
+  onlinestore.chat:
+    image: ${DOCKER_REGISTRY-}onlinestorechat
+    build:
+      context: .
+      dockerfile: OnlineStore.Chat/Dockerfile
+
+  onlinestore.client:
+    image: ${DOCKER_REGISTRY-}onlinestoreclient
+    build:
+      context: .
+      dockerfile: OnlineStore.Client/Dockerfile
+
+  onlinestore.gateway:
+    image: ${DOCKER_REGISTRY-}onlinestoregateway
+    build:
+      context: .
+      dockerfile: OnlineStore.Gateway/Dockerfile

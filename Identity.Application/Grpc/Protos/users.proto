@@ -1,0 +1,16 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Identity.Application.Grpc.Protos";
+
+service GrpcUser {
+	rpc CreateUser (CreateUserRequest) returns (UserDto);
+}
+
+message UserDto {
+	string id = 1;
+	string userName = 2;
+}
+
+message CreateUserRequest {
+	UserDto user = 1;
+}
