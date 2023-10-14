@@ -34,7 +34,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
                     .ReturnsAsync(categories);
 
             // Act
-            var result = await _controller.GetCategoriesAsync();
+            var result = await _controller.GetCategories();
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -53,7 +53,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
                     .ReturnsAsync(category);
 
             // Act
-            var result = await _controller.GetCategoryAsync(id);
+            var result = await _controller.GetCategory(id);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -72,7 +72,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
                     .ReturnsAsync(category);
 
             // Act
-            var result = await _controller.CreateCategoryAsync(createCategoryDto);
+            var result = await _controller.CreateCategory(createCategoryDto);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -86,7 +86,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
             var updateCategoryDto = _fixture.Create<UpdateCategoryDto>();
 
             // Act
-            var result = await _controller.UpdateCategoryAsync(updateCategoryDto);
+            var result = await _controller.UpdateCategory(updateCategoryDto);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -100,7 +100,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
             var id = _fixture.Create<int>();
 
             // Act
-            var result = await _controller.DeleteCategoryAsync(id);
+            var result = await _controller.DeleteCategory(id);
 
             // Assert
             result.Should().BeOfType<NoContentResult>();

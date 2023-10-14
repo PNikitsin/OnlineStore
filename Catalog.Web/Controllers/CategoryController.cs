@@ -19,7 +19,7 @@ namespace Catalog.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetCategoriesAsync()
+        public async Task<IActionResult> GetCategories()
         {
             var categories = await _categoryService.GetCategoriesAsync();
 
@@ -28,7 +28,7 @@ namespace Catalog.Web.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetCategoryAsync(int id)
+        public async Task<IActionResult> GetCategory(int id)
         {
             var category = await _categoryService.GetCategoryAsync(id);
 
@@ -36,15 +36,18 @@ namespace Catalog.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategoryAsync([FromBody] CreateCategoryDto createCategoryDto)
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto createCategoryDto)
         {
             var category = await _categoryService.CreateCategoryAsync(createCategoryDto);
 
-            return Ok(category);
+            var actionName = nameof(GetCategory);
+            var routeValue = new { id = category.Id };
+
+            return CreatedAtAction(actionName, routeValue, category);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCategoryAsync([FromBody] UpdateCategoryDto updateCategoryDto)
+        public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryDto updateCategoryDto)
         {
             await _categoryService.UpdateCategoryAsync(updateCategoryDto);
 
@@ -52,7 +55,7 @@ namespace Catalog.Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategoryAsync(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             await _categoryService.DeleteCategoryAsync(id);
 

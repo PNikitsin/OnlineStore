@@ -34,7 +34,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
                     .ReturnsAsync(products);
 
             // Act
-            var result = await _controller.GetProductsAsync();
+            var result = await _controller.GetProducts();
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -53,7 +53,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
                     .ReturnsAsync(product);
 
             // Act
-            var result = await _controller.GetProductByIdAsync(id);
+            var result = await _controller.GetProduct(id);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -72,7 +72,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
                     .ReturnsAsync(product);
 
             // Act
-            var result = await _controller.CreateProductAsync(createProductDto);
+            var result = await _controller.CreateProduct(createProductDto);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -86,7 +86,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
             var updateProductDto = _fixture.Create<UpdateProductDto>();
 
             // Act
-            var result = await _controller.UpdateProductAsync(updateProductDto);
+            var result = await _controller.UpdateProduct(updateProductDto);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -100,7 +100,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
             var id = _fixture.Create<int>();
 
             // Act
-            var result = await _controller.DeleteProductAsync(id);
+            var result = await _controller.DeleteProduct(id);
 
             // Assert
             result.Should().BeOfType<NoContentResult>();

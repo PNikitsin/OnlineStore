@@ -17,17 +17,9 @@ namespace Catalog.Web.Controllers
             _reportService = reportService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateReportAsync([FromBody] CreateReportDto createReportDto)
-        {
-            var report = await _reportService.CreateReport(createReportDto);
-
-            return Ok(report);
-        }
-
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> GetReportsAsync()
+        public async Task<IActionResult> GetReports()
         {
             var reports = await _reportService.GetReportsAsync();
 
@@ -36,16 +28,27 @@ namespace Catalog.Web.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> GetReportAsync(string id)
+        public async Task<IActionResult> GetReport(string id)
         {
             var report = await _reportService.GetReportAsync(id);
 
             return Ok(report);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateReport([FromBody] CreateReportDto createReportDto)
+        {
+            var report = await _reportService.CreateReport(createReportDto);
+
+            var actionName = nameof(GetReport);
+            var routeValue = new { id = report.Id };
+
+            return CreatedAtAction(actionName, routeValue, report);
+        }
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeleteReportAsync(string id)
+        public async Task<IActionResult> DeleteReport(string id)
         {
             await _reportService.DeleteReportAsync(id);
 

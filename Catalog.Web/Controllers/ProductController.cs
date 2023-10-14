@@ -19,7 +19,7 @@ namespace Catalog.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetProductsAsync()
+        public async Task<IActionResult> GetProducts()
         {
             var products = await _productService.GetProductsAsync();
 
@@ -28,7 +28,7 @@ namespace Catalog.Web.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetProductByIdAsync(int id)
+        public async Task<IActionResult> GetProduct(int id)
         {
             var product = await _productService.GetProductAsync(id);
 
@@ -36,23 +36,26 @@ namespace Catalog.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProductAsync([FromBody] CreateProductDto productDto)
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto createProductDto)
         {
-            var product = await _productService.CreateProductAsync(productDto);
+            var product = await _productService.CreateProductAsync(createProductDto);
 
-            return Ok(product);
+            var actionName = nameof(GetProduct);
+            var routeValue = new { id = product.Id };
+
+            return CreatedAtAction(actionName, routeValue, product);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProductAsync([FromBody] UpdateProductDto productDto)
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDto updateProductDto)
         {
-            await _productService.UpdateProductAsync(productDto);
+            await _productService.UpdateProductAsync(updateProductDto);
 
-            return Ok(productDto);
+            return Ok(updateProductDto);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProductAsync(int id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
             await _productService.DeleteProductAsync(id);
 
