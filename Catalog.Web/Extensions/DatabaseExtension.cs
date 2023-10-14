@@ -1,4 +1,5 @@
-﻿using Catalog.Infrastructure.Data;
+﻿using Catalog.Domain.Interfaces;
+using Catalog.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Web.Extensions
@@ -11,6 +12,8 @@ namespace Catalog.Web.Extensions
 
             services.AddDbContext<ApplicationDbContext>(options
                 => options.UseSqlServer(connectionString));
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.BuildServiceProvider().GetService<ApplicationDbContext>()?.Database.Migrate();
         }
