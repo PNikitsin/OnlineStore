@@ -76,29 +76,13 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
         public async Task GetProductById_ShouldReturnProduct()
         {
             // Arrange
-            var artmotionSnow = new Product
-            {
-                Id = 1,
-                Code = "65R1591T",
-                Name = "Artmotion Snow",
-                Description = "Winter friction tire Artmotion Snow",
-                Price = 117.80M,
-                CategoryId = 1
-            };
-
-            var Artmotion = new Product
-            {
-                Id = 2,
-                Name = "Artmotion",
-                Description = "Artmotion summer tire",
-                Price = 100.62M,
-                CategoryId = 2
-            };
+            var firstProduct = _fixture.Create<Product>();
+            var secondProduct = _fixture.Create<Product>();
 
             var productsCach = new List<Product>
             {
-                artmotionSnow,
-                Artmotion
+                firstProduct,
+                secondProduct
             };
 
             _cacheRepositoryMock.Setup(_cacheRepositoryMock =>
@@ -106,10 +90,10 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
                     .ReturnsAsync(productsCach);
 
             // Act
-            var result = await _productService.GetProductAsync(1);
+            var result = await _productService.GetProductAsync(firstProduct.Id);
 
             // Assert
-            result.Should().BeEquivalentTo(artmotionSnow);
+            result.Should().BeEquivalentTo(firstProduct);
         }
 
         [Fact]

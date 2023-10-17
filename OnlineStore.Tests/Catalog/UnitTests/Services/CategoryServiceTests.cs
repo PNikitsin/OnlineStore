@@ -76,13 +76,13 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
         public async Task GetCategoryById_ShouldReturnCategory()
         {
             // Arrange
-            var carTires = new Category { Id = 1, Name = "Car tires", Description = "Tires for passenger cars" };
-            var lightTruckTires = new Category { Id = 2, Name = "Light truck tires", Description = "Tires for light trucks" };
+            var firstCategory = _fixture.Create<Category>();
+            var secondCategory = _fixture.Create<Category>();
 
             var categoriesCach = new List<Category>
             {
-                carTires,
-                lightTruckTires
+                firstCategory,
+                secondCategory
             };
 
             _cacheRepositoryMock.Setup(_cacheRepositoryMock =>
@@ -90,10 +90,10 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
                     .ReturnsAsync(categoriesCach);
 
             // Act
-            var result = await _categoryService.GetCategoryAsync(1);
+            var result = await _categoryService.GetCategoryAsync(firstCategory.Id);
 
             // Assert
-            result.Should().BeEquivalentTo(carTires);
+            result.Should().BeEquivalentTo(firstCategory);
         }
 
         [Fact]

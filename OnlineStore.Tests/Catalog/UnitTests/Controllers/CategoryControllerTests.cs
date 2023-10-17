@@ -75,8 +75,8 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
             var result = await _controller.CreateCategory(createCategoryDto);
 
             // Assert
-            result.Should().BeOfType<OkObjectResult>();
-            result.As<OkObjectResult>().Value.Should().Be(category);
+            result.Should().BeOfType<CreatedAtActionResult>();
+            result.As<CreatedAtActionResult>().Value.Should().Be(category);
         }
 
         [Fact]
