@@ -100,12 +100,12 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
         [Fact]
         public async Task CreateReport_ShouldReturnCreatedReport()
         {
-            var createReportDto = _fixture.Create<CreateReportDto>();
+            var createReportDto = _fixture.Create<InputReportDto>();
 
             Report createdReport = new();
 
             _mapperMock.Setup(_mapperMock =>
-                _mapperMock.Map<CreateReportDto, Report>(createReportDto))
+                _mapperMock.Map<InputReportDto, Report>(createReportDto))
                     .Returns(createdReport);
 
             _httpContextAccessorMock.Setup(_httpContextAccessorMock =>

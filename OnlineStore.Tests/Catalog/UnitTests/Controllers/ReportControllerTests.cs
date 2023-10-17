@@ -65,7 +65,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
         {
             // Arrange
             var report = _fixture.Create<Report>();
-            var createReportDto = _fixture.Create<CreateReportDto>();
+            var createReportDto = _fixture.Create<InputReportDto>();
 
             _reportServiceMock.Setup(_reportServiceMock =>
                 _reportServiceMock.CreateReport(createReportDto))

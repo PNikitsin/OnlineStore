@@ -36,9 +36,9 @@ namespace Catalog.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateReport([FromBody] CreateReportDto createReportDto)
+        public async Task<IActionResult> CreateReport(InputReportDto inputReportDto)
         {
-            var report = await _reportService.CreateReport(createReportDto);
+            var report = await _reportService.CreateReport(inputReportDto);
 
             var actionName = nameof(GetReport);
             var routeValue = new { id = report.Id };

@@ -31,49 +31,55 @@ namespace Catalog.Application.Services.Implementations
             _backgroundJobClient = backgroundJobClient;
         }
 
-        public async Task<IEnumerable<Report>> GetReportsAsync()
+        public async Task<IEnumerable<OutputReportDto>> GetReportsAsync()
         {
-            var reports = await _cacheRepository.GetDataAsync<IEnumerable<Report>>("report");
+            var reportsCache = await _cacheRepository.GetDataAsync<IEnumerable<Report>>("report");
 
-            if (reports != null)
+            if (reportsCache != null)
             {
-                return reports;
+                return _mapper.Map<IEnumerable<OutputReportDto>>(reportsCache);
             }
 
-            reports = await _reportRepository.GetAllAsync();
+            var reports = await _reportRepository.GetAllAsync();
 
             _backgroundJobClient.Enqueue(() => _cacheRepository.SetDataAsync("report", reports));
 
-            return reports;
+            return _mapper.Map<IEnumerable<OutputReportDto>>(reports);
         }
 
-        public async Task<Report> GetReportAsync(string id)
+        public async Task<OutputReportDto> GetReportAsync(string id)
         {
             Report report = new();
-            var reports = await _cacheRepository.GetDataAsync<IEnumerable<Report>>("report");
 
-            if (reports != null)
+            var reportsCache = await _cacheRepository.GetDataAsync<IEnumerable<Report>>("report");
+
+            if (reportsCache != null)
             {
-                report = reports.FirstOrDefault(report => report.Id == id)!;
+                report = reportsCache.FirstOrDefault(report => report.Id == id)!;
             }
 
             var reportResult = report is null ? await _reportRepository.GetByIdAsync(id) : report;
 
-            return reportResult ?? throw new NotFoundException("Report not found");
+            if (reportResult == null)
+            {
+                throw new NotFoundException("Report not found");
+            }
+
+            return _mapper.Map<OutputReportDto>(reportResult);
         }
 
-        public async Task<Report> CreateReport(CreateReportDto createReportDto)
+        public async Task<OutputReportDto> CreateReport(InputReportDto inputReportDto)
         {
-            var report = _mapper.Map<CreateReportDto, Report>(createReportDto);
+            var report = _mapper.Map<Report>(inputReportDto);
 
-            report.Username = _contextAccessor.HttpContext.User.Identity.Name;
+            report.Username = _contextAccessor.HttpContext!.User.Identity!.Name!;
             report.CreatedAt = DateTime.UtcNow;
 
             await _reportRepository.CreateAsync(report);
 
             _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("report"));
 
-            return report;
+            return _mapper.Map<OutputReportDto>(report);
         }
 
         public async Task DeleteReportAsync(string id)

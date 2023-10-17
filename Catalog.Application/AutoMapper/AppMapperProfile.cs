@@ -13,7 +13,8 @@ namespace Catalog.Application.AutoMapper
             CreateMap<Category, OutputCategoryDto>();
             CreateMap<InputProductDto, Product>();
             CreateMap<Product, OutputProductDto>();
-            CreateMap<CreateReportDto, Report>();
+            CreateMap<InputReportDto, Report>();
+            CreateMap<Report, OutputReportDto>();
         }
     }
 } 
