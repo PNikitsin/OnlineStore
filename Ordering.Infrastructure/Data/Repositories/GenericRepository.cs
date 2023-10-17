@@ -18,7 +18,7 @@ namespace Ordering.Infrastructure.Data.Repositories
             return await _dbContext.Set<T>().AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default)
+        public async Task<T?> GetAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(expression, cancellationToken);
         }
