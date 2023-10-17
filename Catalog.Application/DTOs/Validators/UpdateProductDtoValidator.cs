@@ -2,7 +2,7 @@
 
 namespace Catalog.Application.DTOs.Validators
 {
-    public class UpdateProductDtoValidator : AbstractValidator<UpdateProductDto>
+    public class UpdateProductDtoValidator : AbstractValidator<OutputProductDto>
     {
         public UpdateProductDtoValidator()
         {

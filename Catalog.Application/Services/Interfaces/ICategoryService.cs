@@ -1,14 +1,13 @@
 ﻿using Catalog.Application.DTOs;
-using Catalog.Domain.Entities;
 
 namespace Catalog.Application.Services.Interfaces
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<Category>> GetCategoriesAsync();
-        Task<Category> GetCategoryAsync(int id);
-        Task<Category> CreateCategoryAsync(CreateCategoryDto createCategoryDto);
-        Task UpdateCategoryAsync(UpdateCategoryDto updateCategoryDto);
+        Task<IEnumerable<OutputCategoryDto>> GetCategoriesAsync();
+        Task<OutputCategoryDto> GetCategoryAsync(int id);
+        Task<OutputCategoryDto> CreateCategoryAsync(InputCategoryDto createCategoryDto);
+        Task<OutputCategoryDto> UpdateCategoryAsync(int id, InputCategoryDto inputCategoryDto);
         Task DeleteCategoryAsync(int id);
     }
 }

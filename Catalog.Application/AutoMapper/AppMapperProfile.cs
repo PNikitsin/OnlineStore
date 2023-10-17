@@ -9,10 +9,10 @@ namespace Catalog.Application.AutoMapper
     {
         public AppMapperProfile()
         {
-            CreateMap<CreateCategoryDto, Category>();
-            CreateMap<UpdateCategoryDto, Category>();
-            CreateMap<CreateProductDto, Product>();
-            CreateMap<UpdateProductDto, Product>();
+            CreateMap<InputCategoryDto, Category>();
+            CreateMap<Category, OutputCategoryDto>();
+            CreateMap<InputProductDto, Product>();
+            CreateMap<Product, OutputProductDto>();
             CreateMap<CreateReportDto, Report>();
         }
     }

@@ -65,7 +65,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
         {
             // Arrange
             var category = _fixture.Create<Category>();
-            var createCategoryDto = _fixture.Create<CreateCategoryDto>();
+            var createCategoryDto = _fixture.Create<InputCategoryDto>();
 
             _categoryServiceMock.Setup(_categoryServiceMock =>
                 _categoryServiceMock.CreateCategoryAsync(createCategoryDto))
@@ -83,7 +83,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
         public async Task UpdateCategory_ShouldReturnOkObjectResultWithUpdatedCategory()
         {
             // Arrange
-            var updateCategoryDto = _fixture.Create<UpdateCategoryDto>();
+            var updateCategoryDto = _fixture.Create<OutputCategoryDto>();
 
             // Act
             var result = await _controller.UpdateCategory(updateCategoryDto);

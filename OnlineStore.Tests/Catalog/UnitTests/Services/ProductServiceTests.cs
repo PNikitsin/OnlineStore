@@ -102,7 +102,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
             // Arrange
             Product? product = null;
 
-            var createProductDto = _fixture.Create<CreateProductDto>();
+            var createProductDto = _fixture.Create<InputProductDto>();
             var createdProduct = _fixture.Create<Product>();
 
             _unitOfWorkMock.Setup(_unitOfWorkMock =>
@@ -110,7 +110,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
                     .ReturnsAsync(product);
 
             _mapperMock.Setup(_mapperMock =>
-                _mapperMock.Map<CreateProductDto, Product>(createProductDto))
+                _mapperMock.Map<InputProductDto, Product>(createProductDto))
                     .Returns(createdProduct);
 
             // Act
@@ -125,10 +125,10 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
         {
             // Arrange 
             var product = _fixture.Create<Product>();
-            var createProductDto = _fixture.Create<CreateProductDto>();
+            var createProductDto = _fixture.Create<InputProductDto>();
 
             _mapperMock.Setup(_mapperMock =>
-                _mapperMock.Map<CreateProductDto, Product>(createProductDto))
+                _mapperMock.Map<InputProductDto, Product>(createProductDto))
                     .Returns(product);
 
             _unitOfWorkMock.Setup(_unitOfWorkMock =>
@@ -148,7 +148,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
             // Arrange
             var product = _fixture.Create<Product>();
 
-            var updatedProductDto = _fixture.Create<UpdateProductDto>();
+            var updatedProductDto = _fixture.Create<OutputProductDto>();
 
             _unitOfWorkMock.Setup(_unitOfWorkMock =>
                 _unitOfWorkMock.Products.GetAsync(product => product.Id == updatedProductDto.Id, _cancellationToken))
@@ -167,7 +167,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
             // Arrange 
             Product? product = null;
 
-            var updatedProductDto = _fixture.Create<UpdateProductDto>();
+            var updatedProductDto = _fixture.Create<OutputProductDto>();
 
             _unitOfWorkMock.Setup(_unitOfWorkMock =>
                 _unitOfWorkMock.Products.GetAsync(product => product.Id == updatedProductDto.Id, _cancellationToken))

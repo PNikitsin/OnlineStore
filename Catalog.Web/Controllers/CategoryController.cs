@@ -36,9 +36,9 @@ namespace Catalog.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto createCategoryDto)
+        public async Task<IActionResult> CreateCategory(InputCategoryDto inputCategoryDto)
         {
-            var category = await _categoryService.CreateCategoryAsync(createCategoryDto);
+            var category = await _categoryService.CreateCategoryAsync(inputCategoryDto);
 
             var actionName = nameof(GetCategory);
             var routeValue = new { id = category.Id };
@@ -47,11 +47,11 @@ namespace Catalog.Web.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryDto updateCategoryDto)
+        public async Task<IActionResult> UpdateCategory(int id, InputCategoryDto inputCategoryDto)
         {
-            await _categoryService.UpdateCategoryAsync(updateCategoryDto);
+            var category = await _categoryService.UpdateCategoryAsync(id, inputCategoryDto);
 
-            return Ok(updateCategoryDto);
+            return Ok(category);
         }
 
         [HttpDelete("{id}")]

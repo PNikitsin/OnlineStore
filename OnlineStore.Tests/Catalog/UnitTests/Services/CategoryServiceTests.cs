@@ -102,7 +102,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
             // Arrange
             Category? category = null;
 
-            var createCategoryDto = _fixture.Create<CreateCategoryDto>();
+            var createCategoryDto = _fixture.Create<InputCategoryDto>();
             var createdCategory = _fixture.Create<Category>();
 
             _unitOfWorkMock.Setup(_unitOfWorkMock =>
@@ -110,7 +110,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
                     .ReturnsAsync(category);
 
             _mapperMock.Setup(_mapperMock =>
-                _mapperMock.Map<CreateCategoryDto, Category>(createCategoryDto))
+                _mapperMock.Map<InputCategoryDto, Category>(createCategoryDto))
                     .Returns(createdCategory);
 
             // Act
@@ -125,10 +125,10 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
         {
             // Arrange 
             var category = _fixture.Create<Category>();
-            var createCategoryDto = _fixture.Create<CreateCategoryDto>();
+            var createCategoryDto = _fixture.Create<InputCategoryDto>();
 
             _mapperMock.Setup(_mapperMock =>
-                _mapperMock.Map<CreateCategoryDto, Category>(createCategoryDto))
+                _mapperMock.Map<InputCategoryDto, Category>(createCategoryDto))
                     .Returns(category);
 
             _unitOfWorkMock.Setup(_unitOfWorkMock =>
@@ -148,7 +148,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
             // Arrange
             var category = _fixture.Create<Category>();
 
-            var updatedCategoryDto = _fixture.Create<UpdateCategoryDto>();
+            var updatedCategoryDto = _fixture.Create<OutputCategoryDto>();
 
             _unitOfWorkMock.Setup(_unitOfWorkMock =>
                 _unitOfWorkMock.Categories.GetAsync(categoryr => categoryr.Id == updatedCategoryDto.Id, _cancellationToken))
@@ -167,7 +167,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Services
             // Arrange 
             Category? category = null;
 
-            var updatedCategoryDto = _fixture.Create<UpdateCategoryDto>();
+            var updatedCategoryDto = _fixture.Create<OutputCategoryDto>();
 
             _unitOfWorkMock.Setup(_unitOfWorkMock =>
                 _unitOfWorkMock.Categories.GetAsync(categoryr => categoryr.Id == updatedCategoryDto.Id, _cancellationToken))

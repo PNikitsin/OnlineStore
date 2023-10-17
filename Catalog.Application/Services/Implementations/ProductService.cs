@@ -27,73 +27,80 @@ namespace Catalog.Application.Services.Implementations
             _backgroundJobClient = backgroundJobClient;
         }
 
-        public async Task<IEnumerable<Product>> GetProductsAsync()
+        public async Task<IEnumerable<OutputProductDto>> GetProductsAsync()
         {
-            var products = await _cacheRepository.GetDataAsync<IEnumerable<Product>>("product");
+            var productsCache = await _cacheRepository.GetDataAsync<IEnumerable<Product>>("product");
 
-            if (products != null)
+            if (productsCache != null)
             {
-                return products;
+                return _mapper.Map<IEnumerable<OutputProductDto>>(productsCache);
             }
 
-            products = await _unitOfWork.Products.GetAllAsync();
+            var products = await _unitOfWork.Products.GetAllAsync();
 
             _backgroundJobClient.Enqueue(() => _cacheRepository.SetDataAsync("product", products));
 
-            return products;
+            return _mapper.Map<IEnumerable<OutputProductDto>>(products);
         }
 
-        public async Task<Product> GetProductAsync(int id)
+        public async Task<OutputProductDto> GetProductAsync(int id)
         {
             Product product = new();
             
-            var products = await _cacheRepository.GetDataAsync<IEnumerable<Product>>("product");
+            var productsCache = await _cacheRepository.GetDataAsync<IEnumerable<Product>>("product");
 
-            if (products != null)
+            if (productsCache != null)
             {
-                product = products.FirstOrDefault(product => product.Id == id)!;
+                product = productsCache.FirstOrDefault(product => product.Id == id)!;
             }
 
             var productResult = product is null ? await _unitOfWork.Products.GetAsync(product => product.Id == id) : product;
 
-            return productResult ?? throw new NotFoundException("Product not found");
+            if (productResult == null)
+            {
+                throw new NotFoundException("Product not found");
+            }
+
+            return _mapper.Map<OutputProductDto>(productResult); 
         }
 
-        public async Task<Product> CreateProductAsync(CreateProductDto createProductDto)
+        public async Task<OutputProductDto> CreateProductAsync(InputProductDto inputProductDto)
         {
-            var product = await _unitOfWork.Products.GetAsync(name => name.Name == createProductDto.Name);
+            var product = await _unitOfWork.Products.GetAsync(product => product.Name == inputProductDto.Name);
 
             if (product != null)
             {
-                throw new AlreadyExistsException("Product not found");
+                throw new AlreadyExistsException("Product already exists");
             }
 
-            product = _mapper.Map<CreateProductDto, Product>(createProductDto);
+            product = _mapper.Map<Product>(inputProductDto);
 
             await _unitOfWork.Products.AddAsync(product);
             await _unitOfWork.CommitAsync();
 
             _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("product"));
 
-            return product;
+            return _mapper.Map<OutputProductDto>(product);
         }
 
-        public async Task UpdateProductAsync(UpdateProductDto updateProductDto)
+        public async Task<OutputProductDto> UpdateProductAsync(int id, InputProductDto inputProductDto)
         {
-            var product = await _unitOfWork.Products.GetAsync(category => category.Id == updateProductDto.Id)
+            var product = await _unitOfWork.Products.GetAsync(product => product.Id == id)
                 ?? throw new NotFoundException("Product not found");
 
-            product.Code = updateProductDto.Code;
-            product.Name = updateProductDto.Name;
-            product.Description = updateProductDto.Description;
-            product.Price = updateProductDto.Price;
+            product.Code = inputProductDto.Code;
+            product.Name = inputProductDto.Name;
+            product.Description = inputProductDto.Description;
+            product.Price = inputProductDto.Price;
 
-            product.CategoryId = updateProductDto.CategoryId;
+            product.CategoryId = inputProductDto.CategoryId;
 
             _unitOfWork.Products.Update(product);
             await _unitOfWork.CommitAsync();
 
             _backgroundJobClient.Enqueue(() => _cacheRepository.RemoveAsync("product"));
+
+            return _mapper.Map<OutputProductDto>(product);
         }
 
         public async Task DeleteProductAsync(int id)

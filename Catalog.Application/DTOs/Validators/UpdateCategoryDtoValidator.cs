@@ -2,7 +2,7 @@
 
 namespace Catalog.Application.DTOs.Validators
 {
-    public class UpdateCategoryDtoValidator : AbstractValidator<UpdateCategoryDto>
+    public class UpdateCategoryDtoValidator : AbstractValidator<OutputCategoryDto>
     {
         public UpdateCategoryDtoValidator()
         {

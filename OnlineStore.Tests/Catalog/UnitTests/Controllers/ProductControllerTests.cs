@@ -65,7 +65,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
         {
             // Arrange
             var product = _fixture.Create<Product>();
-            var createProductDto = _fixture.Create<CreateProductDto>();
+            var createProductDto = _fixture.Create<InputProductDto>();
 
             _productServiceMock.Setup(_categoryServiceMock =>
                 _categoryServiceMock.CreateProductAsync(createProductDto))
@@ -83,7 +83,7 @@ namespace OnlineStore.Tests.Catalog.UnitTests.Controllers
         public async Task UpdateProduct_ShouldReturnOkObjectResultWithUpdatedProduct()
         {
             // Arrange
-            var updateProductDto = _fixture.Create<UpdateProductDto>();
+            var updateProductDto = _fixture.Create<OutputProductDto>();
 
             // Act
             var result = await _controller.UpdateProduct(updateProductDto);
